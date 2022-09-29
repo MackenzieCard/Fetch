@@ -20,7 +20,7 @@ return (
 export default Sidebar; 
 
 const Wrapper = styled.div`
-margin-right: 100px;
+
 
 `;
 
