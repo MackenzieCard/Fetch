@@ -64,8 +64,8 @@ const addNewUser = async (req, res) => {
     try {
       await client.connect();
 console.log(req.body)
-      const { ownerName, dogName, avatarSrc, location, joined } = req.body; 
-      const newUser = { ownerName, dogName, avatarSrc, location, joined}; 
+      const { id, ownerName, dogName, avatarSrc, location, joined } = req.body; 
+      const newUser = { id, ownerName, dogName, avatarSrc, location, joined}; 
 
 
       const db = client.db("Fetch_Database");
@@ -88,18 +88,36 @@ console.log(req.body)
   }; 
 
 // PATCH to update an existing user // 
-// const updateExistingUser = async (req, res) => {
-//     const client = new MongoClient(MONGO_URI, options);
-//     const id = req.params.userId; 
-//     try {
-//         await client.connect(); 
-//         const db = client.db("Fetch_Database"); 
-//     } 
-// }
+const updateExistingUser = async (req, res) => {
+    const client = new MongoClient(MONGO_URI, options);
+    const id = req.params.userId;
+
+    try {
+      await client.connect();
+      const db = client.db("Fetch_Database");
+      console.log(req.body);
+      const existingUser = await db.collection("users").findOne({ id });
+
+      const updatedExistingUser = {
+        $set: {
+          ownerName: req.body.ownerName ? req.body.ownerName : existingUser.ownerName,
+          dogName: req.body.dogName ? req.body.dogName : existingUser.dogName,
+          location: req.body.location ? req.body.location : existingUser.location,
+        },
+      };
+      await db.collection("users").updateOne({ id }, updatedExistingUser);
+      res.status(200).json({ status: 200, message: "User Profile Successfully Updated" });
+    } catch (err) {
+      res.status(400).json({ status: 400, message: "User Profile Could Not Be Updated" });
+    } finally {
+    client.close();
+    }
+  };
 
 
 module.exports = {
   getUsers,
   getUser, 
-  addNewUser
+  addNewUser, 
+  updateExistingUser
 };
