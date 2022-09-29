@@ -43,6 +43,6 @@ const NavigationLink = styled(NavLink)`
   &:hover{
     cursor: pointer; 
     background-color:#AFE1AF;
-    max-width: fit-content;
+    /* max-width: fit-content; */
   }
 `;

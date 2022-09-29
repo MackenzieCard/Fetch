@@ -1,4 +1,6 @@
-// All handlers needed for the application
+// All handlers needed for the application 
+
+const { v4: uuidv4 } = require("uuid");
 
 "use strict";
 
@@ -11,6 +13,8 @@ const options = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 };
+
+//// USER HANDLERS //// 
 
 // GET all users //
 const getUsers = async (req, res) => {
@@ -63,12 +67,19 @@ const addNewUser = async (req, res) => {
 
     try {
       await client.connect();
-console.log(req.body)
-      const { id, ownerName, dogName, avatarSrc, location, joined } = req.body; 
-      const newUser = { id, ownerName, dogName, avatarSrc, location, joined}; 
-
+      console.log(req.body)
+      const { ownerName, dogName, avatarSrc, location, joined, email } = req.body; 
+      const newUser = { id:uuidv4(), ownerName, dogName, avatarSrc, location, joined, email}; 
 
       const db = client.db("Fetch_Database");
+      const users = await db.collection("users").find().toArray()
+      const userInDb = users.find((user) => {
+        return (
+          user.email === req.body.email
+        )
+      })
+      if (userInDb) {return res.status(400).json({status:400, message:"User already exists"})}
+
       const result = await db.collection("users").insertOne(newUser);
       
       res.status(201).json({
@@ -106,18 +117,97 @@ const updateExistingUser = async (req, res) => {
         },
       };
       await db.collection("users").updateOne({ id }, updatedExistingUser);
-      res.status(200).json({ status: 200, message: "User Profile Successfully Updated" });
+      res.status(200).json({ status: 200, message: "User profile successfully updated" });
     } catch (err) {
-      res.status(400).json({ status: 400, message: "User Profile Could Not Be Updated" });
+      res.status(400).json({ status: 400, message: "User profile could not be updated" });
     } finally {
     client.close();
     }
   };
 
 
+  //// STATUS HANDLERS //// 
+
+  // GET all statuses //
+const getStatuses = async (req, res) => {
+  const client = new MongoClient(MONGO_URI, options);
+  try {
+    await client.connect();
+    const db = client.db("Fetch_Database");
+    const result = await db.collection("statuses").find().toArray();
+    res.status(200).json({
+      status: 200,
+      data: result,
+      message: "Statuses found",
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: 400,
+      message: "No statuses found",
+    });
+  } finally {
+    client.close();
+  }
+};
+
+// GET a single status //
+  const getStatus = async (req, res) => {
+    const client = new MongoClient(MONGO_URI, options);
+    try {
+      await client.connect();
+      const db = client.db("Fetch_Database");
+      const id = req.params.statusId
+      const result = await db.collection("statuses").findOne({id});
+      res.status(200).json({
+        status: 200,
+        data: result,
+        message: "Status found",
+      });
+    } catch (err) {
+      res.status(400).json({
+        status: 400,
+        message: "Status not found",
+      });
+    } finally {
+      client.close();
+    }
+  };
+
+  // POST a new status // 
+  const addNewStatus = async (req, res) => {
+    const client = new MongoClient(MONGO_URI, options);
+
+    try {
+      await client.connect();
+      console.log(req.body)
+      const { authorName, timestamp, status} = req.body; 
+      const newStatus = { id:uuidv4(), authorName, timestamp, status}; 
+
+      const db = client.db("Fetch_Database");
+      const result = await db.collection("statuses").insertOne(newStatus);
+      
+      res.status(201).json({
+        status: 201, 
+        data: result,
+        message: "New status successfully added"
+      }); 
+    } catch (err) {
+        console.log(err)
+        res.status(400).json({
+            status: 400, 
+            message: "New status could not be added"
+        });
+    } finally {
+        client.close(); 
+    }
+  }; 
+
 module.exports = {
   getUsers,
   getUser, 
   addNewUser, 
-  updateExistingUser
+  updateExistingUser, 
+  getStatuses,
+  getStatus, 
+  addNewStatus
 };

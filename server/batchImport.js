@@ -1,4 +1,4 @@
-const {users} = require("./data"); 
+const {users, statuses} = require("./data"); 
 
 const { MongoClient } = require("mongodb"); 
 require("dotenv").config(); 
@@ -15,6 +15,7 @@ const batchImport = async () => {
         await client.connect(); 
         const db = client.db("Fetch_Database");
         await db.collection("users").insertMany(users); 
+        await db.collection("statuses").insertMany(statuses);
         console.log("success!"); 
     } catch (error) {
         console.log(error); 
