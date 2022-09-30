@@ -9,7 +9,12 @@ const Header = () => {
         <StyledLink to={"/"}>
         <NameContainer>Fetch</NameContainer>
         </StyledLink>
+        <StyledLink to={"/login"}>
         <LogInButton>Log In</LogInButton>
+        </StyledLink>
+        <StyledLink to={"/logout"}>
+        <LogOutButton>Log Out</LogOutButton>
+        </StyledLink>
     </Wrapper>
     )
 }
@@ -47,13 +52,24 @@ const NameContainer = styled.div`
 const LogInButton = styled.div`
 font-family: arial;
 position: absolute;
-right: 0%;
+right: 12%;
 color: #355E3B;
 font-size: 45px ;
 &:hover{
   cursor: pointer;
 }
 `
+
+const LogOutButton = styled.div`
+font-family: arial;
+position: absolute;
+right: 0%;
+color: #355E3B;
+font-size: 45px ;
+&:hover{
+  cursor: pointer;
+}
+`; 
 
 
 // const SignedInButton = styled.div`

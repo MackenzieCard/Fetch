@@ -38,11 +38,14 @@ flex-direction: row;
 `;
 
 const UserInfo = styled.div`
-
+background-color: #AFE1AF;
+border-radius: 7px;
 `;
 
 const Photo = styled.img`
-
+max-height: 150px;
+max-width: 150px;
+border-radius: 7px;
 `;
 
 const OwnerName = styled.div`

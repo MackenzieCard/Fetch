@@ -13,7 +13,7 @@ console.log(users)
       <Wrapper>
         <Title>Home Page</Title>
         <DisplayWrapper>
-        {users && <User data={users} />}
+        {/* {users && <User users={users} />} */}
         {users && users.map((user) => {
             return <UserDisplay user={user}/>
         })}

@@ -7,6 +7,8 @@ import Sidebar from "./Sidebar";
 import Homepage from "./Homepage";
 import ProfilePage from "./ProfilePage";
 import PlayDatePage from "./PlayDatePage";
+import LogIn from "./SignIn/LogIn";
+import LogOut from "./SignIn/Logout";
 
 const App = () => {
   return (
@@ -18,6 +20,8 @@ const App = () => {
         <Sidebar />
         <Routes>
           <Route exact path="/" element={<Homepage />} />
+          <Route path="/login" element={<LogIn />} />
+          <Route path="/logout" element={<LogOut />} />
           <Route path="/profilepage" element={<ProfilePage />} />
           <Route path="/playdatepage" element={<PlayDatePage />} />
         </Routes>
