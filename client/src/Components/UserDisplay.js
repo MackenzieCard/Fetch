@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useState, useEffect, useContext } from "react";
-import { UserContext } from "./UserContext";
+import { UserContext } from "../UserContext";
 
 const UserDisplay = ({ user }) => {
     const { ownerName, dogName, joined, location, avatarSrc } = user
@@ -34,7 +34,7 @@ font-family: arial;
 
 const UserDisplayBox = styled.div`
 display: flex;
-flex-direction: row;
+flex-direction: column;
 `;
 
 const UserInfo = styled.div`
