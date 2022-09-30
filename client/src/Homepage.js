@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { useState, useEffect, useContext } from "react";
 import { UserContext } from "./UserContext";
-import UserDisplay from "../Components/UserDisplay";
+import UserDisplay from "./UserDisplay";
 
 const Homepage = () => {
   const { users, currentUser, currentUserData, setCurrentUserData } =

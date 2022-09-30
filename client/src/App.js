@@ -1,14 +1,14 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import styled from "styled-components";
-import GlobalStyles from "./src/Components/GlobalStyles";
+import GlobalStyles from "./GlobalStyles";
 
-import Header from "./src/Components/Header";
-import Sidebar from "./src/Components/Sidebar";
-import Homepage from "../Homepage";
-import ProfilePage from "./src/Pages/ProfilePage";
-import PlayDatePage from "./src/Pages/PlayDatePage";
-import LogIn from "./src/SignIn/LogIn";
-import LogOut from "./src/SignIn/Logout";
+import Header from "./Header";
+import Sidebar from "./Sidebar";
+import Homepage from "./Homepage";
+import ProfilePage from "./ProfilePage";
+import PlayDatePage from "./PlayDatePage";
+import LogIn from "./SignIn/LogIn";
+import LogOut from "./SignIn/Logout";
 
 const App = () => {
   return (

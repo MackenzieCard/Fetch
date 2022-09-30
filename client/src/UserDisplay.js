@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useState, useEffect, useContext } from "react";
-import { UserContext } from "../UserContext";
+import { UserContext } from "./UserContext";
 
 const UserDisplay = ({ user }) => {
     const { ownerName, dogName, joined, location, avatarSrc } = user
