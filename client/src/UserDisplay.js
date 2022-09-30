@@ -2,15 +2,17 @@ import React from "react";
 import styled from "styled-components";
 import { useState, useEffect, useContext } from "react";
 import { UserContext } from "./UserContext";
+import { useNavigate } from "react-router-dom";
 
-const UserDisplay = ({ user }) => {
+const UserDisplay = ({ user, id }) => {
     const { ownerName, dogName, joined, location, avatarSrc } = user
     const { users, currentUser, currentUserData, setCurrentUserData } =
     useContext(UserContext);
+    let navigate = useNavigate(); 
 
     return (
         <Wrapper> 
-            <UserDisplayBox>
+            {/* <UserDisplayBox onClick = {() => navigate(`/api/get-users/${id}`)}> */}
                 <UserInfo>
                     <Photo src={user.avatarSrc}/>
                     <OwnerName>Owner: {user.ownerName}</OwnerName>
@@ -18,7 +20,7 @@ const UserDisplay = ({ user }) => {
                     <Location>Current Location: {user.location}</Location>
                     <Joined>Joined: {user.joined}</Joined>
                 </UserInfo>
-            </UserDisplayBox>
+            {/* </UserDisplayBox> */}
         </Wrapper>
     ); 
 }; 

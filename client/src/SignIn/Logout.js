@@ -3,26 +3,24 @@ import styled from "styled-components";
 import { useAuth0 } from "@auth0/auth0-react";
 
 const LogOut = () => {
-    const { logout } = useAuth0(); 
+  const { logout } = useAuth0();
+  const LogOutButton = () => {
+    sessionStorage.clear();
+    logout({ returnTo: "http://localhost:3000/login" });
+  };
+  return (
+    <Wrapper>
+      <LogoutButton onClick={LogOutButton}>Log Out</LogoutButton>
+    </Wrapper>
+  );
+};
 
-    return (
-        <Wrapper>
-            <LogoutButton onClick={() => logout({returnTo: "http://localhost:3000/login"})}>
-                Log Out
-            </LogoutButton>
-        </Wrapper>
-    )
-}
-
-
-export default LogOut; 
+export default LogOut;
 
 const Wrapper = styled.div`
-display: flex;
-flex-direction: column;
-align-items: center;
-`; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
 
-const LogoutButton = styled.button`
-
-`; 
+const LogoutButton = styled.button``;

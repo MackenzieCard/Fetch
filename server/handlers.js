@@ -1,8 +1,8 @@
-// All handlers needed for the application 
+// All handlers needed for the application
 
 const { v4: uuidv4 } = require("uuid");
 
-"use strict";
+("use strict");
 
 const { MongoClient } = require("mongodb");
 
@@ -14,7 +14,7 @@ const options = {
   useUnifiedTopology: true,
 };
 
-//// USER HANDLERS //// 
+//// USER HANDLERS ////
 
 // GET all users //
 const getUsers = async (req, res) => {
@@ -38,97 +38,116 @@ const getUsers = async (req, res) => {
   }
 };
 
-// GET specific user // 
+// GET specific user //
 const getUser = async (req, res) => {
-    const client = new MongoClient(MONGO_URI, options);
-    try {
-      await client.connect();
-      const db = client.db("Fetch_Database");
-      const id = req.params.userId
-      const result = await db.collection("users").findOne({id});
-      res.status(200).json({
-        status: 200,
-        data: result,
-        message: "Users found",
-      });
-    } catch (err) {
-      res.status(400).json({
-        status: 400,
-        message: "User not found",
-      });
-    } finally {
-      client.close();
-    }
-  };
+  const client = new MongoClient(MONGO_URI, options);
+  try {
+    await client.connect();
+    const db = client.db("Fetch_Database");
+    const id = req.params.userId;
+    const result = await db.collection("users").findOne({ id });
+    res.status(200).json({
+      status: 200,
+      data: result,
+      message: "Users found",
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: 400,
+      message: "User not found",
+    });
+  } finally {
+    client.close();
+  }
+};
 
 // POST to add new user //
 const addNewUser = async (req, res) => {
-    const client = new MongoClient(MONGO_URI, options);
+  const client = new MongoClient(MONGO_URI, options);
 
-    try {
-      await client.connect();
-      console.log(req.body)
-      const { ownerName, dogName, avatarSrc, location, joined, email } = req.body; 
-      const newUser = { id:uuidv4(), ownerName, dogName, avatarSrc, location, joined, email}; 
-
-      const db = client.db("Fetch_Database");
-      const users = await db.collection("users").find().toArray()
-      const userInDb = users.find((user) => {
-        return (
-          user.email === req.body.email
-        )
-      })
-      if (userInDb) {return res.status(400).json({status:400, message:"User already exists"})}
-
-      const result = await db.collection("users").insertOne(newUser);
-      
-      res.status(201).json({
-        status: 201, 
-        data: result,
-        message: "New user successfully added"
-      }); 
-    } catch (err) {
-        console.log(err)
-        res.status(400).json({
-            status: 400, 
-            message: "User could not be added"
+  try {
+    await client.connect();
+    // console.log(req.body);
+    const newUser = req.body;
+    // newUser hardcoded info for each new user input 
+    newUser.id = uuidv4();
+    // newUser.ownerName = "Mackenzie"; 
+    // newUser.dogName = "Pogo"; 
+    // newUser.location = "Montreal", 
+    // newUser.joined = "September 20, 2022"
+    // newUser.avatarSrc = "./PROJECT-PIC-MACKENZIE.jpg"
+    const db = client.db("Fetch_Database");
+    // const users = await db.collection("users").find().toArray();
+    const users = await db.collection("users").findOne({email: newUser.email});
+    // const userInDb = users.find((user) => {
+    //   return user.email === req.body.email;
+    // });
+    console.log(users)
+    if (users) {
+      return res
+        .status(200)
+        .json({
+          status: 200,
+          message: "User already exists",
+          email: newUser.email,
+          userFound: users, 
         });
-    } finally {
-        client.close(); 
+    } else {
+      const result = await db.collection("users").insertOne(newUser);
+      res.status(201).json({
+        status: 201,
+        data: result,
+        message: "New user successfully added",
+        email: newUser.email,
+      });
     }
-  }; 
-
-// PATCH to update an existing user // 
-const updateExistingUser = async (req, res) => {
-    const client = new MongoClient(MONGO_URI, options);
-    const id = req.params.userId;
-
-    try {
-      await client.connect();
-      const db = client.db("Fetch_Database");
-      console.log(req.body);
-      const existingUser = await db.collection("users").findOne({ id });
-
-      const updatedExistingUser = {
-        $set: {
-          ownerName: req.body.ownerName ? req.body.ownerName : existingUser.ownerName,
-          dogName: req.body.dogName ? req.body.dogName : existingUser.dogName,
-          location: req.body.location ? req.body.location : existingUser.location,
-        },
-      };
-      await db.collection("users").updateOne({ id }, updatedExistingUser);
-      res.status(200).json({ status: 200, message: "User profile successfully updated" });
-    } catch (err) {
-      res.status(400).json({ status: 400, message: "User profile could not be updated" });
-    } finally {
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({
+      status: 400,
+      message: "User could not be added",
+    });
+  } finally {
     client.close();
-    }
-  };
+  }
+};
 
+// PATCH to update an existing user //
+const updateExistingUser = async (req, res) => {
+  const client = new MongoClient(MONGO_URI, options);
+  const id = req.params.userId;
 
-  //// STATUS HANDLERS //// 
+  try {
+    await client.connect();
+    const db = client.db("Fetch_Database");
+    console.log(req.body);
+    const existingUser = await db.collection("users").findOne({ id });
 
-  // GET all statuses //
+    const updatedExistingUser = {
+      $set: {
+        ownerName: req.body.ownerName
+          ? req.body.ownerName
+          : existingUser.ownerName,
+        dogName: req.body.dogName ? req.body.dogName : existingUser.dogName,
+        location: req.body.location ? req.body.location : existingUser.location,
+      },
+    };
+    await db.collection("users").updateOne({ id }, updatedExistingUser);
+    res
+      .status(200)
+      .json({ status: 200, message: "User profile successfully updated" });
+  } catch (err) {
+    res
+      .status(400)
+      .json({ status: 400, message: "User profile could not be updated" });
+  } finally {
+    client.close();
+  }
+};
+
+//// STATUS HANDLERS ////
+
+// GET all statuses //
 const getStatuses = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
   try {
@@ -151,63 +170,63 @@ const getStatuses = async (req, res) => {
 };
 
 // GET a single status //
-  const getStatus = async (req, res) => {
-    const client = new MongoClient(MONGO_URI, options);
-    try {
-      await client.connect();
-      const db = client.db("Fetch_Database");
-      const id = req.params.statusId
-      const result = await db.collection("statuses").findOne({id});
-      res.status(200).json({
-        status: 200,
-        data: result,
-        message: "Status found",
-      });
-    } catch (err) {
-      res.status(400).json({
-        status: 400,
-        message: "Status not found",
-      });
-    } finally {
-      client.close();
-    }
-  };
+const getStatus = async (req, res) => {
+  const client = new MongoClient(MONGO_URI, options);
+  try {
+    await client.connect();
+    const db = client.db("Fetch_Database");
+    const id = req.params.statusId;
+    const result = await db.collection("statuses").findOne({ id });
+    res.status(200).json({
+      status: 200,
+      data: result,
+      message: "Status found",
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: 400,
+      message: "Status not found",
+    });
+  } finally {
+    client.close();
+  }
+};
 
-  // POST a new status // 
-  const addNewStatus = async (req, res) => {
-    const client = new MongoClient(MONGO_URI, options);
+// POST a new status //
+const addNewStatus = async (req, res) => {
+  const client = new MongoClient(MONGO_URI, options);
 
-    try {
-      await client.connect();
-      console.log(req.body)
-      const { authorName, timestamp, status} = req.body; 
-      const newStatus = { id:uuidv4(), authorName, timestamp, status}; 
+  try {
+    await client.connect();
+    console.log(req.body);
+    const { authorName, timestamp, status } = req.body;
+    const newStatus = { id: uuidv4(), authorName, timestamp, status };
 
-      const db = client.db("Fetch_Database");
-      const result = await db.collection("statuses").insertOne(newStatus);
-      
-      res.status(201).json({
-        status: 201, 
-        data: result,
-        message: "New status successfully added"
-      }); 
-    } catch (err) {
-        console.log(err)
-        res.status(400).json({
-            status: 400, 
-            message: "New status could not be added"
-        });
-    } finally {
-        client.close(); 
-    }
-  }; 
+    const db = client.db("Fetch_Database");
+    const result = await db.collection("statuses").insertOne(newStatus);
+
+    res.status(201).json({
+      status: 201,
+      data: result,
+      message: "New status successfully added",
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({
+      status: 400,
+      message: "New status could not be added",
+    });
+  } finally {
+    client.close();
+  }
+};
 
 module.exports = {
   getUsers,
-  getUser, 
-  addNewUser, 
-  updateExistingUser, 
+  getUser,
+  addNewUser,
+  updateExistingUser,
   getStatuses,
-  getStatus, 
-  addNewStatus
+  getStatus,
+  addNewStatus,
 };
