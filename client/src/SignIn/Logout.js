@@ -18,9 +18,15 @@ const LogOut = () => {
 export default LogOut;
 
 const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
+display: flex;
+flex-direction: column; 
+justify-content: center;
+align-items: center; 
+`; 
 
-const LogoutButton = styled.button``;
+const LogoutButton = styled.button`
+background-color: #355e3b;
+border-radius: 10px;
+color: white;
+margin-left: 300px;
+`; 

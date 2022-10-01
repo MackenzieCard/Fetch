@@ -57,9 +57,10 @@ const Wrapper = styled.div`
 
 const DisplayWrapper = styled.div`
   display: grid;
-  grid-template-columns: auto auto auto auto auto;
+  grid-template-columns: auto auto auto auto ;
   min-height: 86vh;
   gap: 50px;
+  max-width: 200px;
 `;
 
 
@@ -67,6 +68,7 @@ const Title = styled.div`
   font-family: arial;
   font-size: 25px;
   color: #355e3b;
+  padding-bottom: 10px;
 `;
 
 const User = styled.div``;

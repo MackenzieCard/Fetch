@@ -8,21 +8,20 @@ const ProfilePage = () => {
     const [profile, setProfile] = useState(null); 
     const { id } = useParams(); 
     const {user} = useAuth0(); 
-    let params = useParams(); 
+    // let params = useParams(); 
 
     // fetch individual profile info 
-    // useEffect(() => {
-    //     if (id) {
-    //         fetch(`/api/get-users/${id}`)
-    //         .then((res) => res.json())
-    //         .then((profileData) => {
-    //             setProfile(profileData.data)
-    //         })
-    //         .catch((err) => console.log(err)); 
-    //     }
-    // },[id])
+    useEffect(() => {
+            fetch(`/api/get-users/${id}`)
+            .then((res) => res.json())
+            .then((data) => {
+                setProfile(data.data)
+            })
+            .catch((err) => console.log(err));
+    },[])
 
 
+    if (profile) {
     return (
         <Wrapper> 
             <UserDisplayBox>
@@ -36,7 +35,8 @@ const ProfilePage = () => {
             </UserDisplayBox>
         </Wrapper>
         )
-    }; 
+    }
+}; 
     
     export default ProfilePage; 
     

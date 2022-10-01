@@ -54,7 +54,7 @@ const NameContainer = styled.div`
 const LogInButton = styled.div`
   font-family: arial;
   position: absolute;
-  right: 12%;
+  right: 0%;
   color: #355e3b;
   font-size: 45px;
   &:hover {
