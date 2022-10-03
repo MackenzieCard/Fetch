@@ -4,7 +4,8 @@ import { useState, useEffect, useContext } from "react";
 import { UserContext } from "./UserContext";
 import { useNavigate } from "react-router-dom";
 
-const UserDisplay = ({ user, id }) => {
+const UserDisplay = ({ user }) => {
+  console.log(user)
   const { ownerName, dogName, joined, location, avatarSrc } = user;
   const { users, currentUser, currentUserData, setCurrentUserData } =
     useContext(UserContext);
@@ -12,7 +13,7 @@ const UserDisplay = ({ user, id }) => {
 
   return (
     <Wrapper>
-      <UserDisplayBox onClick={() => navigate(`/api/get-users/${id}`)}>
+      <UserDisplayBox onClick={() => navigate(`/profilepage/${user.id}`)}>
         <UserInfo>
           <div>
             <Photo src={user.avatarSrc} />
@@ -48,6 +49,7 @@ const UserInfo = styled.div`
   border-radius: 7px;
   width: 250px;
   max-height: 150px;
+  line-height: 25px;
 `;
 
 const Photo = styled.img`

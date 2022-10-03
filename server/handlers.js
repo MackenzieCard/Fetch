@@ -38,19 +38,40 @@ const getUsers = async (req, res) => {
   }
 };
 
-// GET specific user //
+// GET specific user by email //
 const getUser = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
+  console.log(req.body)
+
+  const newUser = {
+  id: uuidv4(), 
+  email: req.body.email, 
+  ownerName: req.body.name,  
+  dogName: "", 
+  location:"", 
+  joined:"", 
+  avatarSrc:"", 
+  }
+
   try {
     await client.connect();
     const db = client.db("Fetch_Database");
-    const id = req.params.userId;
-    const result = await db.collection("users").findOne({ id });
-    res.status(200).json({
-      status: 200,
-      data: result,
-      message: "Users found",
-    });
+    const email = req.body.email;
+    const result = await db.collection("users").findOne({ email });
+    if (result) {
+      res.status(200).json({
+        status: 200,
+        data: result,
+        message: "Users found",
+      });
+    } else {
+      const newUserObject = await db.collection("users").insertOne(newUser);
+      res.status(200).json({
+        status: 200,
+        data: newUserObject,
+        message: "Users found",
+      });
+    }
   } catch (err) {
     res.status(400).json({
       status: 400,
@@ -61,10 +82,46 @@ const getUser = async (req, res) => {
   }
 };
 
+// GET user by Id // 
+const getUserById = async (req, res) => {
+  console.log("hdhdjfhdj")
+  const client = new MongoClient(MONGO_URI, options);
+
+  const {userId} = req.params;
+  console.log(userId)
+
+  try {
+
+    await client.connect();
+    const db = client.db("Fetch_Database");
+
+    const result = await db.collection("users").findOne({ id: userId });
+    if (result) {
+      res.status(200).json({
+        status: 200,
+        data: result,
+        message: "Users found",
+      });
+    } else {
+      res.status(404).json({
+        status: 404,
+        message: "User not found",
+      });
+    }
+  } catch (err) {
+    res.status(500).json({
+      status: 500,
+      message: "User not found",
+    });
+  } finally {
+    client.close();
+  }
+};
+
 // POST to add new user //
 const addNewUser = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
-
+  if (!req.body) return 
   try {
     await client.connect();
     // console.log(req.body);
@@ -229,4 +286,5 @@ module.exports = {
   getStatuses,
   getStatus,
   addNewStatus,
+  getUserById
 };

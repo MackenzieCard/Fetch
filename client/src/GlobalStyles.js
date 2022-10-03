@@ -77,7 +77,7 @@ input {
   input {
     font-size: 24px;
     height: 42px;
-    border: 2px solid var(--color-orange);
+    /* border: 2px solid var(--color-orange); */
     border-radius: 4px;
     padding: 0 12px;
   }

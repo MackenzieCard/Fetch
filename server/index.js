@@ -1,7 +1,7 @@
 const express = require("express"); 
 const morgan = require('morgan'); 
 
-const { getUsers, getUser, addNewUser, updateExistingUser, getStatus, getStatuses, addNewStatus } = require("./handlers");
+const { getUsers, getUser, addNewUser, updateExistingUser, getStatus, getStatuses, addNewStatus, getUserById } = require("./handlers");
 
 
 express()
@@ -12,7 +12,8 @@ express()
 
 // REST Endpoints 
 .get("/api/get-users", getUsers)
-.get("/api/get-users/:userId", getUser)
+.get("/api/get-user/:userId", getUserById)
+.post("/api/get-user", getUser)
 .get("/api/get-statuses", getStatuses)
 .get("/api/get-status/:statusId", getStatus)
 

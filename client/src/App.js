@@ -10,13 +10,30 @@ import ProfilePage from "./ProfilePage";
 import PlayDatePage from "./PlayDatePage";
 import LogIn from "./SignIn/LogIn";
 import LogOut from "./SignIn/Logout";
+import EditProfile from "./EditProfile";
+
 import {UserContext} from "./UserContext"; 
 import { useAuth0 } from "@auth0/auth0-react";
 
 const App = () => {
   const {currentUser} = useContext(UserContext)
-  const {user} = useAuth0()
+  // const [profile, setProfile] = useState(null); 
+  const {user, loginWithRedirect} = useAuth0()
   console.log(user)
+//   const handleLogin = async () => {
+//     console.log(user, "hello")
+//     // if (user) {
+//       fetch("/api/get-user", {
+//         method: "POST", 
+//         headers: {
+//           "Content-Type":"application/json", 
+//         }, 
+//         body: JSON.stringify(user.email), 
+//       })
+//       .then(res => res.json())
+//       .then(res => console.log(res, "response"))
+//     // }
+// }
   return (
     <Wrapper>
       <BrowserRouter>
@@ -29,7 +46,8 @@ const App = () => {
           <Route path="/" element={<Homepage />} />
           <Route path="/login" element={!user ? <LogIn /> : <Navigate to= "/" />} />
           <Route path="/logout" element={user ? <LogOut /> : <Navigate to="/" />} />
-          <Route path="/profilepage" element={<ProfilePage />} />
+          <Route path="/profilepage/:id" element={<ProfilePage />} />
+          <Route path ="/editprofile" element={<EditProfile />} />
           <Route path="/playdatepage" element={<PlayDatePage />} />
         </Routes>
         </Main>

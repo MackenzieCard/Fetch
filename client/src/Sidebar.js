@@ -1,16 +1,19 @@
-import React from "react";
+import React, {useContext} from "react";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 import {BiHomeAlt} from 'react-icons/bi'; 
 import {CgProfile} from 'react-icons/cg'; 
 import {FaPaw} from 'react-icons/fa'; 
+import { UserContext } from "./UserContext";
 
 const Sidebar = () => {
+const {currentUser} = useContext(UserContext)
+const userId = sessionStorage.getItem("user-id")
 return (
     <Wrapper>
         <Pages>
         <NavigationLink to="/"><BiHomeAlt/>Home</NavigationLink>
-        <NavigationLink to="/profilepage"><CgProfile/>Profile</NavigationLink>
+        {userId && <NavigationLink to={`/profilepage/${userId}`}><CgProfile/>Profile</NavigationLink>}
         <NavigationLink to="/playdatepage"><FaPaw/>Play Dates</NavigationLink>
         </Pages>
     </Wrapper>
