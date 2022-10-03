@@ -12,9 +12,9 @@ const userId = sessionStorage.getItem("user-id")
 return (
     <Wrapper>
         <Pages>
-        <NavigationLink to="/"><BiHomeAlt/>Home</NavigationLink>
+        {userId && <NavigationLink to="/"><BiHomeAlt/>Home</NavigationLink>}
         {userId && <NavigationLink to={`/profilepage/${userId}`}><CgProfile/>Profile</NavigationLink>}
-        <NavigationLink to="/playdatepage"><FaPaw/>Play Dates</NavigationLink>
+        {userId && <NavigationLink to="/playdatepage"><FaPaw/>Play Dates</NavigationLink>}
         </Pages>
     </Wrapper>
 )

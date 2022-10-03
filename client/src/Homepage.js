@@ -56,6 +56,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 10px;
+  margin-left: 250px;
 `;
 
 const DisplayWrapper = styled.div`

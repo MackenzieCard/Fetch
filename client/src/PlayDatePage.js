@@ -32,6 +32,7 @@ export default PlayDatePage;
 
 const Wrapper = styled.div`
   font-family: arial;
+  margin-left: 250px;
 `;
 
 const Title = styled.div`

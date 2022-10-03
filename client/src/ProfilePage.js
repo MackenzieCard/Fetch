@@ -8,7 +8,6 @@ const ProfilePage = () => {
   const userId = sessionStorage.getItem("user-id");
   const [profile, setProfile] = useState(null);
   const { currentUser } = useContext(UserContext);
-  // console.log(currentUser, "profile")
   const navigate = useNavigate();
   let { id } = useParams();
 
@@ -17,7 +16,6 @@ const ProfilePage = () => {
     fetch(`/api/get-user/${id}`)
       .then((res) => res.json())
       .then((data) => {
-        // console.log(data)
         setProfile(data.data);
       })
       .catch((err) => console.log(err));
@@ -60,6 +58,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  margin-left: 250px;
   font-family: arial;
 `;
 

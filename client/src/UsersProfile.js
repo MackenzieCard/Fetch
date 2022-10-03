@@ -1,1 +1,0 @@
-// This code is meant to render the other users' profiles when you click on them 
