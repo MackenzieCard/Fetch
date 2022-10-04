@@ -13,10 +13,7 @@ const Homepage = () => {
     const {user} = useAuth0()
 
     useEffect(() => {
-      // let foundUser = sessionStorage.getItem("user-email")
       if (!user) return 
-      // console.log(foundUser)
-      // if (!foundUser) {
       fetch("/api/get-user", {
         method: "POST", 
         headers: {
@@ -28,7 +25,6 @@ const Homepage = () => {
       .then(res => {if (!currentUser) setCurrentUser(res.data)
         sessionStorage.setItem("user-id", res.data.id)
       })
-    // }
     }, [])
 
 console.log(users)
@@ -56,7 +52,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 10px;
-  margin-left: 250px;
+  /* margin-left: 250px; */
 `;
 
 const DisplayWrapper = styled.div`

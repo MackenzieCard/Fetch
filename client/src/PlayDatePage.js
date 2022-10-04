@@ -1,3 +1,5 @@
+// This page contains the code that renders the Request a Playdate page
+
 import React from "react";
 import styled from "styled-components";
 import UserDisplay from "./UserDisplay";
@@ -11,6 +13,7 @@ const PlayDatePage = () => {
     return (
 <Wrapper>
     <Title> Request a Playdate! </Title>
+    {/* TODO: RENDER USER PROFILES + BUTTON TO REQUEST PLAYDATES */}
       {/* <UserDisplayBox>
         <UserInfo>
           <div>
@@ -32,7 +35,7 @@ export default PlayDatePage;
 
 const Wrapper = styled.div`
   font-family: arial;
-  margin-left: 250px;
+  /* margin-left: 250px; */
 `;
 
 const Title = styled.div`

@@ -25,6 +25,7 @@ const UserDisplay = ({ user }) => {
             <Joined>Joined: {user.joined}</Joined>
           </div>
         </UserInfo>
+        {/* TODO: RENDER MOST RECENT STATUS UPDATES ON MINI PROFILE */}
       </UserDisplayBox>
     </Wrapper>
   );

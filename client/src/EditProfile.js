@@ -46,9 +46,11 @@ const EditProfile = ({ handleSubmit }) => {
           }}
         />
         <ButtonWrapper> 
+          {/* TODO: LOGIC FOR ACTUALLY UPDATING PROFILE + MONGODB HERE */}
         <Submit type="submit" disabled={value.length > 0 ? false : true}>
           Submit
         </Submit>
+        {/* TODO: LOGIC FOR REDIRECTING BACK TO CURRENT USER PROFILE UPON CLICKING CANCEL */}
         <NavigationLink to={`/profilepage/${userId}`}> Cancel </NavigationLink>
         </ButtonWrapper> 
       </StyledForm>
