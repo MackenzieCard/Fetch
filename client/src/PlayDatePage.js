@@ -5,28 +5,20 @@ import styled from "styled-components";
 import UserDisplay from "./UserDisplay";
 import { UserContext } from "./UserContext";
 import { useState, useEffect, useContext } from "react";
+import PlayDateDisplay from "./PlayDateDisplay";
 
 const PlayDatePage = () => {
-    // const { ownerName, dogName, joined, location, avatarSrc } = user;
-    // const { users, currentUser, currentUserData, setCurrentUserData } =
-    // useContext(UserContext);
+  const { users, currentUser, setCurrentUser, currentUserData, setCurrentUserData } =
+    useContext(UserContext);
     return (
 <Wrapper>
     <Title> Request a Playdate! </Title>
     {/* TODO: RENDER USER PROFILES + BUTTON TO REQUEST PLAYDATES */}
-      {/* <UserDisplayBox>
-        <UserInfo>
-          <div>
-            <Photo src={user.avatarSrc} />
-          </div>
-          <div>
-            <OwnerName>Owner: {user.ownerName}</OwnerName>
-            <DogName>Dog: {user.dogName}</DogName>
-            <Location>Current Location: {user.location}</Location>
-            <Joined>Joined: {user.joined}</Joined>
-          </div>
-        </UserInfo>
-      </UserDisplayBox> */}
+    <DisplayWrapper>
+        {users && users.map((user) => {
+            return <PlayDateDisplay user={user}/> 
+        })}
+        </DisplayWrapper>
     </Wrapper>
   );
 };
@@ -34,51 +26,25 @@ const PlayDatePage = () => {
 export default PlayDatePage;
 
 const Wrapper = styled.div`
-  font-family: arial;
-  /* margin-left: 250px; */
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
 `;
+
+const DisplayWrapper = styled.div`
+  display: grid;
+  grid-template-columns: auto auto auto auto ;
+  min-height: 86vh;
+  gap: 50px;
+  max-width: 200px;
+`;
+
 
 const Title = styled.div`
   font-family: arial;
-  font-size: 25px;
+  font-size: 45px;
+  font-weight: bold;
   color: #355e3b;
   padding-bottom: 10px;
-`;
-
-const UserDisplayBox = styled.div`
-  display: flex;
-  &:hover{
-    cursor: pointer;
-  }
-`;
-
-const UserInfo = styled.div`
-  display: flex;
-  background-color: #afe1af;
-  border-radius: 7px;
-  width: 250px;
-  max-height: 150px;
-`;
-
-const Photo = styled.img`
-  max-height: 150px;
-  max-width: 150px;
-  border-radius: 7px;
-`;
-
-const OwnerName = styled.div`
-
-`;
-
-const DogName = styled.div`
-
-`;
-
-const Joined = styled.div`
-
-`;
-
-const Location = styled.div`
-
 `;
 

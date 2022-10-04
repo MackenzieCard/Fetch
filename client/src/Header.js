@@ -35,7 +35,8 @@ const StyledLink = styled(Link)`
 `;
 
 const NameContainer = styled.div`
-  font-size: 45px;
+  font-family: arial;
+  font-size: 60px;
   font-weight: bold;
   color: #355e3b;
   left: 0%;

@@ -3,11 +3,12 @@
 
 import React, { useContext, useState, useEffect } from "react";
 import styled from "styled-components";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { UserContext } from "./UserContext";
 import { useNavigate } from "react-router-dom";
 
-const ProfilePage = ({handleSubmit}) => {
+
+const ProfilePage = () => {
   const userId = sessionStorage.getItem("user-id");
   const [profile, setProfile] = useState(null);
   const { currentUser } = useContext(UserContext);
@@ -15,20 +16,43 @@ const ProfilePage = ({handleSubmit}) => {
   let { id } = useParams();
   const [state, setState] = useState(null);
   const [userInput, setUserInput] = useState("");
-  const [submit, setSubmit] = useState(false);
-  const [count, setCount] = useState(280);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [value, setValue] = useState(null);
-  
 
   // fetch individual profile info
   useEffect(() => {
     fetch(`/api/get-user/${id}`)
       .then((res) => res.json())
       .then((data) => {
+        console.log(data.data.status);
         setProfile(data.data);
       })
       .catch((err) => console.log(err));
   }, [id]);
+
+// Fetch method POST for posting new statuses 
+   const handleSubmit = (e) => {
+    setIsSubmitting(true)
+    e.preventDefault();
+    const timestamp = new Date; 
+    fetch("/api/add-status", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({ status: userInput, timestamp, id:userId }),
+    })
+.then(res => res.json())
+// Logic for posting new statuses to user profile 
+.then( () => { (setIsSubmitting(false))
+  setUserInput("")
+  const newProfile = {...profile}
+  newProfile.status.unshift({ status: userInput, timestamp:timestamp.toDateString() })
+  setProfile(newProfile)
+}) 
+ .catch(err => console.log(err))
+}; 
 
   if (profile) {
     return (
@@ -51,55 +75,82 @@ const ProfilePage = ({handleSubmit}) => {
 
         {/* This block of code renders the basic user information display */}
         <PageDiv>
-        <UserDisplayBox>
-          <UserInfo>
-            <Photo src={profile.avatarSrc} />
-            <OwnerName>Owner: {profile.ownerName}</OwnerName>
-            <DogName>Dog: {profile.dogName}</DogName>
-            <Location>Current Location: {profile.location}</Location>
-            <Joined>Joined: {profile.joined}</Joined>
-          </UserInfo>
-        </UserDisplayBox>
+          <UserDisplayBox>
+            <UserInfo>
+              <Photo src={profile.avatarSrc} />
+              <OwnerName>Owner: {profile.ownerName}</OwnerName>
+              <DogName>Dog: {profile.dogName}</DogName>
+              <Location>Current Location: {profile.location}</Location>
+              <Joined>Joined: {profile.joined}</Joined>
+              {id !== userId ? <Button>Request a Playdate</Button> : ""}
+            </UserInfo>
+          </UserDisplayBox>
 
-
-        {/* This block of code renders the status update box 
+          {/* This block of code renders the status update box 
         for the logged in current user only */}
-        <StatusComponent> 
-          <StatusBox onSubmit={handleSubmit}>
-            {/* If current user, display the status update component */}
-          { id === userId ? <input
-              placeholder={"Howl at your friends!"}
-              value={userInput}
-              type="test"
-              onChange={(e) => {
-                setUserInput(e.target.value);
-                setCount(280 - e.target.value.length);
-              }}
-            /> :""}
-            <NumberWrapper>
-            { id === userId ? <CharLeftWarning>Characters Left:</CharLeftWarning> : ""}
-              { id === userId ? <CharLeft warning={count <= 55 && count > 0} error={count < 1}>
-                {count}
-              </CharLeft> : ""} 
-              { id === userId ? <Submit
-                disabled={userInput.length <= 0 || count < 1}
-                type="submit"
-              >
-                Woof!
-              </Submit> : "" }
-            </NumberWrapper>
-          </StatusBox>
-          { id === userId ? <PreviousStatuses> 
-            Your Statuses
-            {/* TODO: LOGIC FOR POSTING STATUSES HERE */}
-          </PreviousStatuses> : ""} 
-          {/* If looking at other users' profiles, display this title 
-          above statuses */}
-           { id !== userId ? <UserPreviousStatuses>
-            Previous Status Updates! 
-            {/* TODO: LOGIC FOR POSTING USERS' STATUSES HERE */}
-          </UserPreviousStatuses> : ""} 
-        </StatusComponent>
+          <StatusComponent>
+            <StatusBox onSubmit={handleSubmit}>
+              {/* If current user, display the status update component */}
+              {id === userId ? (
+                <input
+                  placeholder={"Howl at your friends!"}
+                  value={userInput}
+                  type="test"
+                  onChange={(e) => {
+                    setUserInput(e.target.value);
+          
+                  }}
+                />
+              ) : (
+                ""
+              )}
+              <NumberWrapper>
+                {id === userId ? (
+                  <CharLeftWarning>Characters Left:</CharLeftWarning>
+                ) : (
+                  ""
+                )}
+                {id === userId ? (
+                  <CharLeft
+                    warning={userInput.length >= 240}
+                    error={userInput.length < 1}
+                  >
+                    {280 - userInput.length}
+                  </CharLeft>
+                ) : (
+                  ""
+                )}
+                {id === userId ? (
+                  <Submit
+                    disabled={userInput.length <= 0 || isSubmitting}
+                    type="submit"
+                  >
+                    Woof!
+                  </Submit>
+                ) : (
+                  ""
+                )}
+              </NumberWrapper>
+            </StatusBox>
+            <PreviousStatuses>
+              {/* If looking at other users' profiles, display this title above statuses */}
+              <CurrentUserTitle>
+                {" "}
+                {id === userId ? "Your Statuses" : "Status Updates"}
+              </CurrentUserTitle>
+              {/* Logic for rendering statuses */}
+              <Statuses>
+                {profile.status.map((element) => {
+                  return (
+                    <StatusDiv>
+                      <StatusContent>{element.status}</StatusContent>
+                      <Timestamp>{element.timestamp}</Timestamp>
+                    </StatusDiv>
+                  );
+                })}
+              </Statuses>
+            </PreviousStatuses>
+          </StatusComponent>
         </PageDiv>
       </Wrapper>
     );
@@ -108,13 +159,12 @@ const ProfilePage = ({handleSubmit}) => {
 
 export default ProfilePage;
 
-// Styling for the header and contents of the page 
+// Styling for the header and contents of the page
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  /* margin-left: 250px; */
   font-family: arial;
 `;
 
@@ -122,9 +172,15 @@ const TopWrapper = styled.div`
   display: flex;
 `;
 
+const CurrentUserTitle = styled.div`
+font-size: 40px;
+font-weight: bold;
+`;
+
 const Title = styled.div`
   font-family: arial;
-  font-size: 25px;
+  font-size: 45px;
+  font-weight: bold;
   color: #355e3b;
 `;
 
@@ -145,10 +201,21 @@ const UserDisplayBox = styled.div`
   flex-direction: column;
 `;
 
+const Statuses = styled.div`
+
+`;
+
+const StatusDiv = styled.div`
+border: 0.5px solid #E5E4E2;
+padding-top: 10px;
+`; 
+
 const UserInfo = styled.div`
+  display: flex;
+  flex-direction: column;
   background-color: #afe1af;
-  height: 400px;
-  width: 400px;
+  /* height: 400px;
+  width: 400px;  */
   border-radius: 7px;
   line-height: 25px;
   margin-right: 175px;
@@ -161,7 +228,30 @@ const Photo = styled.img`
 `;
 
 const PageDiv = styled.div`
+  display: flex;
+`;
+
+const Button = styled.button`
+  height: 20px;
+  font-size: 15px;
+  margin-top: 4px;
+  background-color: #355e3b;
+  color: white;
+  border-radius: 10px;
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const StatusContent = styled.div`
+font-size: 20px;
+padding-bottom: 10px;
+`;
+
+const Timestamp = styled.div`
 display: flex;
+font-weight: lighter;
+font-size: 10px;
 `; 
 
 const OwnerName = styled.div``;
@@ -172,8 +262,8 @@ const Joined = styled.div``;
 
 const Location = styled.div``;
 
-
-// Styling for the status update input 
+// Styling for the status update input on current user's
+// profile page
 const StatusBox = styled.form`
   display: flex;
   flex-direction: column;
@@ -210,24 +300,15 @@ const Submit = styled.button`
 `;
 
 const PreviousStatuses = styled.div`
-font-size: 24px;
-font-family: arial;
-color: #355e3b; 
+  font-size: 24px;
+  font-family: arial;
+  color: #355e3b;
 `;
 
-const NumberWrapper = styled.div`
+const NumberWrapper = styled.div``;
 
-`;
+const CharLeftWarning = styled.div``;
 
-const CharLeftWarning = styled.div`
-
-`;
-
-const UserPreviousStatuses = styled.div`
-font-size: 24px;
-font-family: arial;
-color: #355e3b; 
-`; 
 
 const CharLeft = styled.div`
   color: ${(props) =>

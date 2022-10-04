@@ -36,7 +36,6 @@ if (!user || !currentUser ) {
       <Wrapper>
         <Title>Home Page</Title>
         <DisplayWrapper>
-        {/* {users && <User users={users} />} */}
         {users && users.map((user) => {
             return <UserDisplay user={user}/>
         })}
@@ -66,7 +65,8 @@ const DisplayWrapper = styled.div`
 
 const Title = styled.div`
   font-family: arial;
-  font-size: 25px;
+  font-size: 45px;
+  font-weight: bold;
   color: #355e3b;
   padding-bottom: 10px;
 `;

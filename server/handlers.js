@@ -41,17 +41,17 @@ const getUsers = async (req, res) => {
 // GET specific user by email //
 const getUser = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
-  console.log(req.body)
+  console.log(req.body);
 
   const newUser = {
-  id: uuidv4(), 
-  email: req.body.email, 
-  ownerName: req.body.name,  
-  dogName: "", 
-  location:"", 
-  joined:"", 
-  avatarSrc:"", 
-  }
+    id: uuidv4(),
+    email: req.body.email,
+    ownerName: req.body.name,
+    dogName: "",
+    location: "",
+    joined: "",
+    avatarSrc: "",
+  };
 
   try {
     await client.connect();
@@ -82,16 +82,15 @@ const getUser = async (req, res) => {
   }
 };
 
-// GET user by Id // 
+// GET user by Id //
 const getUserById = async (req, res) => {
-  console.log("hdhdjfhdj")
+  console.log("hdhdjfhdj");
   const client = new MongoClient(MONGO_URI, options);
 
-  const {userId} = req.params;
-  console.log(userId)
+  const { userId } = req.params;
+  console.log(userId);
 
   try {
-
     await client.connect();
     const db = client.db("Fetch_Database");
 
@@ -121,34 +120,34 @@ const getUserById = async (req, res) => {
 // POST to add new user //
 const addNewUser = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
-  if (!req.body) return 
+  if (!req.body) return;
   try {
     await client.connect();
     // console.log(req.body);
     const newUser = req.body;
-    // newUser hardcoded info for each new user input 
+    // newUser hardcoded info for each new user input
     newUser.id = uuidv4();
-    // newUser.ownerName = "Mackenzie"; 
-    // newUser.dogName = "Pogo"; 
-    // newUser.location = "Montreal", 
+    // newUser.ownerName = "Mackenzie";
+    // newUser.dogName = "Pogo";
+    // newUser.location = "Montreal",
     // newUser.joined = "September 20, 2022"
     // newUser.avatarSrc = "./PROJECT-PIC-MACKENZIE.jpg"
     const db = client.db("Fetch_Database");
     // const users = await db.collection("users").find().toArray();
-    const users = await db.collection("users").findOne({email: newUser.email});
+    const users = await db
+      .collection("users")
+      .findOne({ email: newUser.email });
     // const userInDb = users.find((user) => {
     //   return user.email === req.body.email;
     // });
-    console.log(users)
+    console.log(users);
     if (users) {
-      return res
-        .status(200)
-        .json({
-          status: 200,
-          message: "User already exists",
-          email: newUser.email,
-          userFound: users, 
-        });
+      return res.status(200).json({
+        status: 200,
+        message: "User already exists",
+        email: newUser.email,
+        userFound: users,
+      });
     } else {
       const result = await db.collection("users").insertOne(newUser);
       res.status(201).json({
@@ -256,12 +255,22 @@ const addNewStatus = async (req, res) => {
   try {
     await client.connect();
     console.log(req.body);
-    const { authorName, timestamp, status } = req.body;
-    const newStatus = { id: uuidv4(), authorName, timestamp, status };
+    const { id, timestamp, status } = req.body;
+    // const newStatus = { timestamp, status };
 
     const db = client.db("Fetch_Database");
-    const result = await db.collection("statuses").insertOne(newStatus);
-
+    const result = await db
+      .collection("users")
+      .updateOne(
+        { id },
+        { $push: { status: { $each:[{status, timestamp}], $position: 0 } } }
+      )
+      // .findOneAndUpdate(
+      //   { id },
+      //   { $addToSet: { status: newStatus } },
+      //   { returnDocument: "after" }
+      // );
+console.log(result)
     res.status(201).json({
       status: 201,
       data: result,
@@ -286,5 +295,5 @@ module.exports = {
   getStatuses,
   getStatus,
   addNewStatus,
-  getUserById
+  getUserById,
 };
