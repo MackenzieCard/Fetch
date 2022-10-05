@@ -19,7 +19,7 @@ const ProfilePage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [value, setValue] = useState(null);
 
-  // fetch individual profile info
+  // Fetch individual profile info
   useEffect(() => {
     fetch(`/api/get-user/${id}`)
       .then((res) => res.json())

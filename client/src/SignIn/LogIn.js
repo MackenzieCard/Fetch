@@ -38,6 +38,7 @@ justify-content: center;
 align-items: center; 
 `; 
 
+
 const LoginButton = styled.button`
 background-color: #355e3b;
 border-radius: 10px;
