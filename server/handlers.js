@@ -172,7 +172,8 @@ const addNewUser = async (req, res) => {
 const updateExistingUser = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
   const id = req.params.userId;
-
+const {ownerName, dogName, location, email} = req.body;
+console.log(req.body)
   try {
     await client.connect();
     const db = client.db("Fetch_Database");
@@ -181,11 +182,9 @@ const updateExistingUser = async (req, res) => {
 
     const updatedExistingUser = {
       $set: {
-        ownerName: req.body.ownerName
-          ? req.body.ownerName
-          : existingUser.ownerName,
-        dogName: req.body.dogName ? req.body.dogName : existingUser.dogName,
-        location: req.body.location ? req.body.location : existingUser.location,
+        ownerName: ownerName || existingUser.ownerName,
+        dogName:  dogName || existingUser.dogName,
+        location: location || existingUser.location,
       },
     };
     await db.collection("users").updateOne({ id }, updatedExistingUser);

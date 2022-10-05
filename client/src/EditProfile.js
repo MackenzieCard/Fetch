@@ -1,58 +1,75 @@
+// This component contains the code that allows the current user to
+// update their profile information
+
 import React, { useContext, useState, useEffect } from "react";
 import styled from "styled-components";
-import { Link, useParams } from "react-router-dom";
 import { UserContext } from "./UserContext";
 import { useNavigate } from "react-router-dom";
 
+const EditProfile = () => {
+  const [value, setValue] = useState({});
+  const userId = sessionStorage.getItem("user-id");
+  let navigate = useNavigate();
 
-const EditProfile = ({ handleSubmit }) => {
-  let formData = {};
-  const [value, setValue] = useState("");
-  const userId = sessionStorage.getItem("user-id")
-  const navigate = useNavigate();
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    console.log("submitted")
+    fetch(`/api/update-user/${userId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(value),
+    }).then(res => {res.json()})
+    .then(data => {console.log(data)})
+  };
+
   return (
     <Wrapper>
       <Title> Edit Your Information </Title>
       <Subheading>
         Use these fields to edit or update your current information
       </Subheading>
-      <StyledForm onSubmit={(e) => handleSubmit(e, formData)}>
+      <StyledForm onSubmit={(e) => handleSubmit(e)}>
         <Input
           type="text"
           placeholder="Owner Name"
           onChange={(e) => {
-            setValue(e.target.value);
+            setValue({ ...value, ownerName: e.target.value });
           }}
         />
         <Input
           type="text"
           placeholder="Dog Name"
           onChange={(e) => {
-            setValue(e.target.value);
+            setValue({ ...value, dogName: e.target.value });
           }}
         />
         <Input
           type="text"
           placeholder="Location"
           onChange={(e) => {
-            setValue(e.target.value);
+            setValue({ ...value, location: e.target.value });
           }}
         />
         <Input
-          type="email"
+          type="text"
           placeholder="Email"
           onChange={(e) => {
-            setValue(e.target.value);
+            setValue({ ...value, email: e.target.value });
           }}
         />
-        <ButtonWrapper> 
-          {/* TODO: LOGIC FOR ACTUALLY UPDATING PROFILE + MONGODB HERE */}
-        <Submit type="submit" disabled={value.length > 0 ? false : true}>
-          Submit
-        </Submit>
-        {/* TODO: LOGIC FOR REDIRECTING BACK TO CURRENT USER PROFILE UPON CLICKING CANCEL */}
-        <NavigationLink to={`/profilepage/${userId}`}> Cancel </NavigationLink>
-        </ButtonWrapper> 
+        <ButtonWrapper>
+          <Submit type="submit" value="Submit" disabled={!value.dogName && !value.ownerName && !value.location && !value.email}>
+            Submit
+          </Submit>
+          {/* TODO: LOGIC FOR REDIRECTING BACK TO CURRENT USER PROFILE UPON CLICKING CANCEL */}
+        <CancelButton onClick={() => navigate(`/profilepage/${userId}`)}>
+            {" "}
+            Cancel{" "}
+          </CancelButton>
+        </ButtonWrapper>
       </StyledForm>
     </Wrapper>
   );
@@ -88,6 +105,10 @@ const Submit = styled.button`
   } */
 `;
 
+const CancelButton = styled.button`
+
+`;
+
 const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
@@ -99,14 +120,14 @@ const StyledForm = styled.form`
 
 const Input = styled.input`
   margin: 5px 0;
-  border:1px solid #355e3b;
+  border: 1px solid #355e3b;
 `;
 
 const Title = styled.div`
   font-family: Arial;
   font-size: 25px;
   font-weight: bold;
-  color: #355e3b; 
+  color: #355e3b;
 `;
 
 const Subheading = styled.div`
@@ -124,14 +145,14 @@ const NavigationLink = styled.button`
   color: white;
   margin: 15px 0;
   border-radius: 5px;
-  &:hover{
+  &:hover {
     cursor: pointer;
   }
   &:disabled {
     background-color: gray;
   }
-`; 
+`;
 
 const ButtonWrapper = styled.div`
-display: flex;
-`; 
+  display: flex;
+`;
