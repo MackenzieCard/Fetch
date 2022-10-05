@@ -64,7 +64,6 @@ const EditProfile = () => {
           <Submit type="submit" value="Submit" disabled={!value.dogName && !value.ownerName && !value.location && !value.email}>
             Submit
           </Submit>
-          {/* TODO: LOGIC FOR REDIRECTING BACK TO CURRENT USER PROFILE UPON CLICKING CANCEL */}
         <CancelButton onClick={() => navigate(`/profilepage/${userId}`)}>
             {" "}
             Cancel{" "}
@@ -106,7 +105,18 @@ const Submit = styled.button`
 `;
 
 const CancelButton = styled.button`
-
+border: none;
+  border-radius: 2px;
+  max-width: 150px;
+  background-color: #355e3b;
+  border-radius: 10px;
+  font-size: 25px;
+  color: white;
+  margin: 15px 0;
+  border-radius: 5px;
+    &:hover{
+    cursor: pointer;
+  }
 `;
 
 const StyledForm = styled.form`
