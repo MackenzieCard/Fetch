@@ -4,21 +4,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 const LogIn = ({handleLogin}) => {
     const { loginWithRedirect, user } = useAuth0();
-// const handleLogin = async () => {
-//     await loginWithRedirect()
-//     console.log(user)
-//     if (user) {
-//       fetch("/api/get-user", {
-//         method: "POST", 
-//         headers: {
-//           "Content-Type":"application/json", 
-//         }, 
-//         body: JSON.stringify(user.email), 
-//       })
-//       .then(res => res.json())
-//       .then(res => console.log(res))
-//     }
-// }
+
 
 return (
 <Wrapper>

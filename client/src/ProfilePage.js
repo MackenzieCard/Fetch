@@ -82,6 +82,8 @@ const ProfilePage = () => {
               <DogName>Dog: {profile.dogName}</DogName>
               <Location>Current Location: {profile.location}</Location>
               <Joined>Joined: {profile.joined}</Joined>
+              {/* TODO: AFTER CLICKING, MAKE IT GREYED OUT AND SAY 
+            "PLAYDATE REQUESTED" + DISABLE THE BUTTON */}
               {id !== userId ? <Button>Request a Playdate</Button> : ""}
             </UserInfo>
           </UserDisplayBox>

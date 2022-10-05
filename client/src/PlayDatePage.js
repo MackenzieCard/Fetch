@@ -13,9 +13,9 @@ const PlayDatePage = () => {
     return (
 <Wrapper>
     <Title> Request a Playdate! </Title>
-    {/* TODO: RENDER USER PROFILES + BUTTON TO REQUEST PLAYDATES */}
     <DisplayWrapper>
         {users && users.map((user) => {
+          if (user.id !== currentUser.id)
             return <PlayDateDisplay user={user}/> 
         })}
         </DisplayWrapper>

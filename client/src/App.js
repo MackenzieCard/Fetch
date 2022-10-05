@@ -20,20 +20,7 @@ const App = () => {
   // const [profile, setProfile] = useState(null); 
   const {user, loginWithRedirect} = useAuth0()
   console.log(user)
-//   const handleLogin = async () => {
-//     console.log(user, "hello")
-//     // if (user) {
-//       fetch("/api/get-user", {
-//         method: "POST", 
-//         headers: {
-//           "Content-Type":"application/json", 
-//         }, 
-//         body: JSON.stringify(user.email), 
-//       })
-//       .then(res => res.json())
-//       .then(res => console.log(res, "response"))
-//     // }
-// }
+console.log(currentUser)
   return (
     <Wrapper>
       <BrowserRouter>
@@ -44,11 +31,11 @@ const App = () => {
         <Routes>
           {/* <Route path="/" element={ user ? <Homepage /> : <Navigate to= "/login" /> } /> */}
           <Route path="/" element={<Homepage />} />
-          <Route path="/login" element={!user ? <LogIn /> : <Navigate to= "/" />} />
-          <Route path="/logout" element={user ? <LogOut /> : <Navigate to="/" />} />
-          <Route path="/profilepage/:id" element={<ProfilePage />} />
-          <Route path ="/editprofile" element={<EditProfile />} />
-          <Route path="/playdatepage" element={<PlayDatePage />} />
+          <Route path="/login" element={!currentUser ? <LogIn /> : <Navigate to= "/" />} />
+          <Route path="/logout" element={currentUser ? <LogOut /> : <Navigate to="/" />} />
+          <Route path="/profilepage/:id" element={currentUser ? <ProfilePage /> : <Navigate to="/login" />} />
+          <Route path ="/editprofile" element={ currentUser ? <EditProfile /> : <Navigate to="/login" /> } />
+          <Route path="/playdatepage" element={ currentUser ? <PlayDatePage /> : <Navigate to="/login" />} />
         </Routes>
         </Main>
     </BrowserRouter>

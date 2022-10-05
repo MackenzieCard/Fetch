@@ -42,7 +42,9 @@ const getUsers = async (req, res) => {
 const getUser = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
   console.log(req.body);
-
+if (!req.body.email || !req.body.name) {
+  return res.status(400).json({status: 400, message: "Missing information"})
+}
   const newUser = {
     id: uuidv4(),
     email: req.body.email,

@@ -12,21 +12,9 @@ const Homepage = () => {
     const navigate = useNavigate(); 
     const {user} = useAuth0()
 
-    useEffect(() => {
-      if (!user) return 
-      fetch("/api/get-user", {
-        method: "POST", 
-        headers: {
-          "Content-Type":"application/json", 
-        }, 
-        body: JSON.stringify({email: user.email, name:user.given_name}), 
-      })
-      .then(res => res.json())
-      .then(res => {if (!currentUser) setCurrentUser(res.data)
-        sessionStorage.setItem("user-id", res.data.id)
-      })
-    }, [])
 
+
+console.log(currentUser)
 console.log(users)
 if (!user || !currentUser ) {
   navigate("/login")
@@ -34,9 +22,10 @@ if (!user || !currentUser ) {
   return (
     <>
       <Wrapper>
-        <Title>Home Page</Title>
+        <Title>Fetch Users in Your Area </Title>
         <DisplayWrapper>
         {users && users.map((user) => {
+            if (user.id !== currentUser.id)
             return <UserDisplay user={user}/>
         })}
         </DisplayWrapper>

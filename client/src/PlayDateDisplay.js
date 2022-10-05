@@ -28,7 +28,6 @@ const PlayDateDisplay = ({ user }) => {
             <Button>Request a Playdate</Button>
           </div>
         </UserInfo>
-        {/* TODO: RENDER MOST RECENT STATUS UPDATES ON MINI PROFILE */}
       </UserDisplayBox>
     </Wrapper>
   );
