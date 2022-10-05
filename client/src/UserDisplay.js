@@ -23,9 +23,10 @@ const UserDisplay = ({ user }) => {
             <DogName>Dog: {user.dogName}</DogName>
             <Location>Current Location: {user.location}</Location>
             <Joined>Joined: {user.joined}</Joined>
+            {/* TODO: RENDER MOST RECENT STATUS UPDATES ON MINI PROFILE */}
+            <LatestStatus>Latest Status: {user.status[0].status} </LatestStatus>
           </div>
         </UserInfo>
-        {/* TODO: RENDER MOST RECENT STATUS UPDATES ON MINI PROFILE */}
       </UserDisplayBox>
     </Wrapper>
   );
@@ -48,13 +49,13 @@ const UserInfo = styled.div`
   display: flex;
   background-color: #afe1af;
   border-radius: 7px;
-  width: 250px;
-  max-height: 150px;
-  line-height: 25px;
+  width: 350px;
+  max-height: 200px;
+  line-height: 28px;
 `;
 
 const Photo = styled.img`
-  max-height: 150px;
+  max-height: 200px;
   max-width: 150px;
   border-radius: 7px;
 `;
@@ -74,5 +75,9 @@ const Joined = styled.div`
 const Location = styled.div`
 
 `;
+
+const LatestStatus = styled.div`
+
+`; 
 
 

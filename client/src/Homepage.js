@@ -45,7 +45,7 @@ const Wrapper = styled.div`
 
 const DisplayWrapper = styled.div`
   display: grid;
-  grid-template-columns: auto auto auto auto ;
+  grid-template-columns: auto auto auto ;
   min-height: 86vh;
   gap: 50px;
   max-width: 200px;
