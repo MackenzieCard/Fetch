@@ -111,22 +111,6 @@ const ProfilePage = () => {
               ) : (
                 ""
               )}
-              <NumberWrapper>
-                {id === userId ? (
-                  <CharLeftWarning>Characters Left:</CharLeftWarning>
-                ) : (
-                  ""
-                )}
-                {id === userId ? (
-                  <CharLeft
-                    warning={userInput.length >= 240}
-                    error={userInput.length < 1}
-                  >
-                    {280 - userInput.length}
-                  </CharLeft>
-                ) : (
-                  ""
-                )}
                 {id === userId ? (
                   <Submit
                     disabled={userInput.length <= 0 || isSubmitting}
@@ -137,7 +121,6 @@ const ProfilePage = () => {
                 ) : (
                   ""
                 )}
-              </NumberWrapper>
             </StatusBox>
 
             {/* This block of code renders the previous posted statuses  */}
@@ -166,7 +149,7 @@ const ProfilePage = () => {
           <PlaydateTitle> Pending Playdates </PlaydateTitle>
           <Playdates> {profile.playdates.length && profile.playdates.map((playdate) => (
             <>
-            <div>Requested by: {playdate.name}</div>
+            <div>Requested By: {playdate.name}</div>
             <div>Status: {playdate.status}</div>
             {/* Display accept / decline buttons, only on current user profile */}
             {id === userId ?<AcceptButton>Accept</AcceptButton> : ""}
