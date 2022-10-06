@@ -42,9 +42,11 @@ const getUsers = async (req, res) => {
 const getUser = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
   console.log(req.body);
-if (!req.body.email || !req.body.name) {
-  return res.status(400).json({status: 400, message: "Missing information"})
-}
+  if (!req.body.email || !req.body.name) {
+    return res
+      .status(400)
+      .json({ status: 400, message: "Missing information" });
+  }
   const newUser = {
     id: uuidv4(),
     email: req.body.email,
@@ -86,7 +88,6 @@ if (!req.body.email || !req.body.name) {
 
 // GET user by Id //
 const getUserById = async (req, res) => {
-  console.log("hdhdjfhdj");
   const client = new MongoClient(MONGO_URI, options);
 
   const { userId } = req.params;
@@ -125,23 +126,15 @@ const addNewUser = async (req, res) => {
   if (!req.body) return;
   try {
     await client.connect();
-    // console.log(req.body);
     const newUser = req.body;
-    // newUser hardcoded info for each new user input
     newUser.id = uuidv4();
-    // newUser.ownerName = "Mackenzie";
-    // newUser.dogName = "Pogo";
-    // newUser.location = "Montreal",
-    // newUser.joined = "September 20, 2022"
-    // newUser.avatarSrc = "./PROJECT-PIC-MACKENZIE.jpg"
+
     const db = client.db("Fetch_Database");
-    // const users = await db.collection("users").find().toArray();
+
     const users = await db
       .collection("users")
       .findOne({ email: newUser.email });
-    // const userInDb = users.find((user) => {
-    //   return user.email === req.body.email;
-    // });
+
     console.log(users);
     if (users) {
       return res.status(200).json({
@@ -174,8 +167,8 @@ const addNewUser = async (req, res) => {
 const updateExistingUser = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
   const id = req.params.userId;
-const {ownerName, dogName, location, email} = req.body;
-console.log(req.body)
+  const { ownerName, dogName, location, email } = req.body;
+  console.log(req.body);
   try {
     await client.connect();
     const db = client.db("Fetch_Database");
@@ -185,7 +178,7 @@ console.log(req.body)
     const updatedExistingUser = {
       $set: {
         ownerName: ownerName || existingUser.ownerName,
-        dogName:  dogName || existingUser.dogName,
+        dogName: dogName || existingUser.dogName,
         location: location || existingUser.location,
       },
     };
@@ -197,6 +190,80 @@ console.log(req.body)
     res
       .status(400)
       .json({ status: 400, message: "User profile could not be updated" });
+  } finally {
+    client.close();
+  }
+};
+
+//// PLAYDATE HANDLERS ////
+
+// GET playdates for a sepcific user
+const getPlaydatesByUser = async (req, res) => {
+  const client = new MongoClient(MONGO_URI, options);
+  const { userEmail } = req.params;
+
+  try {
+    await client.connect();
+    const db = client.db("Fetch_Database");
+    const result = await db.collection("users").findOne({ email: userEmail });
+
+    res.status(200).json({
+      status: 200,
+      data: result.playdates,
+      message: "Users found",
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: 400,
+      message: "User not found",
+    });
+  } finally {
+    client.close();
+  }
+};
+
+// PATCH to request new playdate to user //
+const updatePlaydate = async (req, res) => {
+  const client = new MongoClient(MONGO_URI, options);
+  const { email, status, id, name, requestType } = req.body;
+
+  try {
+    await client.connect();
+    const db = client.db("Fetch_Database");
+    if (requestType === "request") {
+      const result = await db
+        .collection("users")
+        .updateOne(
+          { id },
+          { $push: { playdates: { "requested-by": email, name, status } } }
+        );
+
+      res.status(201).json({
+        status: 201,
+        data: result,
+        message: "New playdate successfully requested",
+      });
+    }
+    if (requestType === "cancel") {
+      const result = await db
+        .collection("users")
+        .updateOne(
+          { id },
+          { $pull: { playdates: { "requested-by": email, name, status } } }
+        );
+
+      res.status(200).json({
+        status: 200,
+        data: result,
+        message: "Playdate successfully cancelled" ,
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({
+      status: 400,
+      message: "Playdate could not be requested",
+    });
   } finally {
     client.close();
   }
@@ -257,21 +324,16 @@ const addNewStatus = async (req, res) => {
     await client.connect();
     console.log(req.body);
     const { id, timestamp, status } = req.body;
-    // const newStatus = { timestamp, status };
 
     const db = client.db("Fetch_Database");
     const result = await db
       .collection("users")
       .updateOne(
         { id },
-        { $push: { status: { $each:[{status, timestamp}], $position: 0 } } }
-      )
-      // .findOneAndUpdate(
-      //   { id },
-      //   { $addToSet: { status: newStatus } },
-      //   { returnDocument: "after" }
-      // );
-console.log(result)
+        { $push: { status: { $each: [{ status, timestamp }], $position: 0 } } }
+      );
+
+    console.log(result);
     res.status(201).json({
       status: 201,
       data: result,
@@ -297,4 +359,6 @@ module.exports = {
   getStatus,
   addNewStatus,
   getUserById,
+  getPlaydatesByUser,
+  updatePlaydate,
 };

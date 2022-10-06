@@ -15,8 +15,9 @@ const PlayDatePage = () => {
     <Title> Request a Playdate! </Title>
     <DisplayWrapper>
         {users && users.map((user) => {
-          if (user.id !== currentUser.id)
-            return <PlayDateDisplay user={user}/> 
+          const notCurrentUser=user.id !== currentUser.id
+          const hasAPlaydate = currentUser.playdates.find(playdate => playdate["requested-by"]===user.email)
+            return notCurrentUser && <PlayDateDisplay hasAPlaydate={hasAPlaydate} user={user}/> 
         })}
         </DisplayWrapper>
     </Wrapper>

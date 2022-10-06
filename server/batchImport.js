@@ -15,7 +15,6 @@ const batchImport = async () => {
         await client.connect(); 
         const db = client.db("Fetch_Database");
         await db.collection("users").insertMany(users); 
-        await db.collection("statuses").insertMany(statuses);
         console.log("success!"); 
     } catch (error) {
         console.log(error); 

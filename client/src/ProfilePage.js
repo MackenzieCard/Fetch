@@ -30,6 +30,14 @@ const ProfilePage = () => {
       .catch((err) => console.log(err));
   }, [id]);
 
+  // useEffect(() => {
+  //   fetch(`/api/get-playdates/${profile.email}`)
+  //   .then((res) => res.json())
+  //   .then((data) => {
+
+  //   })
+  // },[profile])
+
 // Fetch method POST for posting new statuses 
    const handleSubmit = (e) => {
     setIsSubmitting(true)
@@ -82,9 +90,6 @@ const ProfilePage = () => {
               <DogName>Dog: {profile.dogName}</DogName>
               <Location>Current Location: {profile.location}</Location>
               <Joined>Joined: {profile.joined}</Joined>
-              {/* TODO: AFTER CLICKING, MAKE IT GREYED OUT AND SAY 
-            "PLAYDATE REQUESTED" + DISABLE THE BUTTON */}
-              {id !== userId ? <Button>Request a Playdate</Button> : ""}
             </UserInfo>
           </UserDisplayBox>
 
@@ -134,6 +139,8 @@ const ProfilePage = () => {
                 )}
               </NumberWrapper>
             </StatusBox>
+
+            {/* This block of code renders the previous posted statuses  */}
             <PreviousStatuses>
               {/* If looking at other users' profiles, display this title above statuses */}
               <CurrentUserTitle>
@@ -153,6 +160,20 @@ const ProfilePage = () => {
               </Statuses>
             </PreviousStatuses>
           </StatusComponent>
+
+          {/* This block of code renders the pending playdates section  */}
+          <PlaydateWrapper>
+          <PlaydateTitle> Pending Playdates </PlaydateTitle>
+          <Playdates> {profile.playdates.length && profile.playdates.map((playdate) => (
+            <>
+            <div>Requested by: {playdate.name}</div>
+            <div>Status: {playdate.status}</div>
+            {/* Display accept / decline buttons, only on current user profile */}
+            {id === userId ?<AcceptButton>Accept</AcceptButton> : ""}
+            {id === userId ?<DeclineButton>Decline</DeclineButton> : ""}
+            </>
+          ))}</Playdates>
+          </PlaydateWrapper>
         </PageDiv>
       </Wrapper>
     );
@@ -178,6 +199,7 @@ const CurrentUserTitle = styled.div`
 font-size: 40px;
 font-weight: bold;
 `;
+
 
 const Title = styled.div`
   font-family: arial;
@@ -216,8 +238,6 @@ const UserInfo = styled.div`
   display: flex;
   flex-direction: column;
   background-color: #afe1af;
-  /* height: 400px;
-  width: 400px;  */
   border-radius: 7px;
   line-height: 25px;
   margin-right: 175px;
@@ -256,6 +276,7 @@ font-weight: lighter;
 font-size: 10px;
 `; 
 
+
 const OwnerName = styled.div``;
 
 const DogName = styled.div``;
@@ -263,6 +284,55 @@ const DogName = styled.div``;
 const Joined = styled.div``;
 
 const Location = styled.div``;
+
+
+//// PLAYDATE SECTION //// 
+
+const PlaydateWrapper = styled.div`
+display: flex;
+flex-direction: column;
+`; 
+
+
+const Playdates = styled.div`
+display: flex;
+flex-direction: column;
+background-color: #afe1af;
+  border-radius: 7px;
+  width: 150px;
+`; 
+
+const PlaydateTitle = styled.div`
+  font-family: arial;
+  font-size: 45px;
+  font-weight: bold;
+  color: #355e3b;
+`; 
+
+const AcceptButton = styled.button`
+  height: 20px;
+  font-size: 10px;
+  margin-top: 4px;
+  background-color: #355e3b;
+  color: white;
+  border-radius: 10px;
+  &:hover {
+    cursor: pointer;
+  }`; 
+
+const DeclineButton = styled.button`
+  height: 20px;
+  font-size: 10px;
+  margin-top: 4px;
+  background-color: #355e3b;
+  color: white;
+  border-radius: 10px;
+  &:hover {
+    cursor: pointer;
+  }`; 
+
+
+
 
 // Styling for the status update input on current user's
 // profile page
@@ -310,7 +380,6 @@ const PreviousStatuses = styled.div`
 const NumberWrapper = styled.div``;
 
 const CharLeftWarning = styled.div``;
-
 
 const CharLeft = styled.div`
   color: ${(props) =>

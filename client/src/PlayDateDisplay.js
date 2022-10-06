@@ -4,28 +4,56 @@ import { useState, useEffect, useContext } from "react";
 import { UserContext } from "./UserContext";
 import { useNavigate } from "react-router-dom";
 
-const PlayDateDisplay = ({ user }) => {
-  console.log(user);
+const PlayDateDisplay = ({ user, hasAPlaydate }) => {
   const { ownerName, dogName, joined, location, avatarSrc } = user;
   const { users, currentUser, currentUserData, setCurrentUserData } =
     useContext(UserContext);
+  console.log(currentUser);
+  // Navigation to specific profile page
   let navigate = useNavigate();
+  // For button logic
+  const [isRequested, setIsRequested] = useState(hasAPlaydate);
+  const managePlaydate = (requestType) => {
 
+      // PATCH add to playdates array
+      fetch("/api/update-playdate", {
+        method: "PATCH",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          email: currentUser.email,
+          name: currentUser.ownerName, 
+          status: "Pending",
+          id: user.id,
+          requestType
+        }),
+      })
+        .then((res) => res.json())
+        .then(requestType === "request" ? setIsRequested(true) : setIsRequested(false));
+  };
   return (
     <Wrapper>
-      <UserDisplayBox onClick={() => navigate(`/profilepage/${user.id}`)}>
+      <UserDisplayBox>
         <UserInfo>
-          <div>
+          <PictureButton onClick={() => navigate(`/profilepage/${user.id}`)}>
             <Photo src={user.avatarSrc} />
-          </div>
+          </PictureButton>
           <div>
             <OwnerName>Owner: {user.ownerName}</OwnerName>
             <DogName>Dog: {user.dogName}</DogName>
             <Location>Current Location: {user.location}</Location>
             <Joined>Joined: {user.joined}</Joined>
-            {/* TODO: AFTER CLICKING, MAKE IT GREYED OUT AND SAY 
-            "PLAYDATE REQUESTED" + DISABLE THE BUTTON */}
-            <Button>Request a Playdate</Button>
+            {!isRequested && (
+              <Button onClick={() => managePlaydate("request")}>
+                Request a Playdate
+              </Button>
+            )}
+            {isRequested && (
+              <CancelButton onClick={() => managePlaydate("cancel")}>
+                Cancel Request
+              </CancelButton>
+            )}
           </div>
         </UserInfo>
       </UserDisplayBox>
@@ -47,6 +75,12 @@ const UserDisplayBox = styled.div`
     cursor: pointer;
   }
 `;
+
+const PictureButton = styled.button`
+border-style: none;
+background-color:#afe1af;
+border-radius: 7px;
+`; 
 
 const UserInfo = styled.div`
   display: flex;
@@ -75,6 +109,10 @@ const Button = styled.button`
   &:hover {
     cursor: pointer;
   }
+`;
+
+const CancelButton = styled(Button)`
+  background-color: gray;
 `;
 
 const OwnerName = styled.div``;

@@ -5,7 +5,6 @@ import { UserContext } from "./UserContext";
 import { useNavigate } from "react-router-dom";
 
 const UserDisplay = ({ user }) => {
-  console.log(user)
   const { ownerName, dogName, joined, location, avatarSrc } = user;
   const { users, currentUser, currentUserData, setCurrentUserData } =
     useContext(UserContext);
