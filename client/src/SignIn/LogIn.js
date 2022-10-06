@@ -1,16 +1,18 @@
 import React from "react";
 import styled from "styled-components";
 import { useAuth0 } from "@auth0/auth0-react";
+// import image from "../LoginImage/LogInBackgroundPic.jpg"
+
 
 const LogIn = ({handleLogin}) => {
     const { loginWithRedirect, user } = useAuth0();
-
-
 return (
 <Wrapper>
+    {/* <div style={{backgroundImage: `url(${image})`}}>  */}
     <LoginButton onClick={() => loginWithRedirect()}>
         Log In Now to Join the Fun! 
     </LoginButton>
+    {/* </div> */}
 </Wrapper>
 )
 }
