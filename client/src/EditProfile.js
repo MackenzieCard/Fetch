@@ -69,6 +69,7 @@ const EditProfile = () => {
             Cancel{" "}
           </CancelButton>
         </ButtonWrapper>
+        <ReturnButton onClick={() => navigate(`/profilepage/${userId}`)}>Return to Profile</ReturnButton>
       </StyledForm>
     </Wrapper>
   );
@@ -94,7 +95,7 @@ const Submit = styled.button`
   color: white;
   margin: 15px 0;
   border-radius: 5px;
-  margin-right: 10px;
+  margin-right: 5px;
   &:disabled {
     background-color: gray;
     cursor: not-allowed;
@@ -118,6 +119,21 @@ border: none;
     cursor: pointer;
   }
 `;
+
+const ReturnButton = styled.button`
+border: none;
+  border-radius: 2px;
+  max-width: 200px;
+  background-color: #355e3b;
+  border-radius: 10px;
+  font-size: 25px;
+  color: white;
+  border-radius: 5px;
+  margin-left: 5px;
+    &:hover{
+    cursor: pointer;
+  }
+`; 
 
 const StyledForm = styled.form`
   display: flex;

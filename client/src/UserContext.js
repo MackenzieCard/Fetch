@@ -8,6 +8,7 @@ export const CurrentUserProvider = ({ children }) => {
   const [users, setUsers] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
   const [currentUserData, setCurrentUserData] = useState(null);
+  const [refreshData, setRefreshData] = useState(false); 
 const {user} = useAuth0()
 // fetch users from /api/get-users
   useEffect(() => {
@@ -30,10 +31,11 @@ const {user} = useAuth0()
       body: JSON.stringify({email: user.email, name:user.given_name}), 
     })
     .then(res => res.json())
-    .then(res => {if (!currentUser) setCurrentUser(res.data)
+    .then(res => {setCurrentUser(res.data)
+      console.log(res)
       sessionStorage.setItem("user-id", res.data.id)
     })
-  }, [user]);
+  }, [user, refreshData]);
 
   return (
     <UserContext.Provider
@@ -43,7 +45,9 @@ const {user} = useAuth0()
         currentUser,
         setCurrentUser,
         currentUserData, 
-        setCurrentUserData
+        setCurrentUserData, 
+        refreshData, 
+        setRefreshData
       }}
     >
       {children}

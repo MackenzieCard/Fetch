@@ -7,7 +7,6 @@ import { useParams } from "react-router-dom";
 import { UserContext } from "./UserContext";
 import { useNavigate } from "react-router-dom";
 
-
 const ProfilePage = () => {
   const userId = sessionStorage.getItem("user-id");
   const [profile, setProfile] = useState(null);
@@ -18,6 +17,8 @@ const ProfilePage = () => {
   const [userInput, setUserInput] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [value, setValue] = useState(null);
+  const [isAccepted, setIsAccepted] = useState(false);
+  const [isDeclined, setIsDeclined] = useState(false);
 
   // Fetch individual profile info
   useEffect(() => {
@@ -28,39 +29,58 @@ const ProfilePage = () => {
         setProfile(data.data);
       })
       .catch((err) => console.log(err));
-  }, [id]);
+  }, [id, isAccepted, isDeclined]);
 
-  // useEffect(() => {
-  //   fetch(`/api/get-playdates/${profile.email}`)
-  //   .then((res) => res.json())
-  //   .then((data) => {
-
-  //   })
-  // },[profile])
-
-// Fetch method POST for posting new statuses 
-   const handleSubmit = (e) => {
-    setIsSubmitting(true)
+  // Fetch method POST for posting new statuses
+  const handleSubmit = (e) => {
+    setIsSubmitting(true);
     e.preventDefault();
-    const timestamp = new Date; 
+    const timestamp = new Date();
     fetch("/api/add-status", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
-      body: JSON.stringify({ status: userInput, timestamp, id:userId }),
+      body: JSON.stringify({ status: userInput, timestamp, id: userId }),
     })
-.then(res => res.json())
-// Logic for posting new statuses to user profile 
-.then( () => { (setIsSubmitting(false))
-  setUserInput("")
-  const newProfile = {...profile}
-  newProfile.status.unshift({ status: userInput, timestamp:timestamp.toDateString() })
-  setProfile(newProfile)
-}) 
- .catch(err => console.log(err))
-}; 
+      .then((res) => res.json())
+      // Logic for posting new statuses to user profile
+      .then(() => {
+        setIsSubmitting(false);
+        setUserInput("");
+        const newProfile = { ...profile };
+        newProfile.status.unshift({
+          status: userInput,
+          timestamp: timestamp.toDateString(),
+        });
+        setProfile(newProfile);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const handlePlaydate = (requestType, requestedBy) => {
+    if (!isAccepted || !isDeclined) {
+      fetch("/api/update-playdate", {
+        method: "PATCH",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          email: requestedBy,
+          status: "Pending",
+          id: currentUser.id,
+          requestType,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          requestType === "accept" ? setIsAccepted(true) : setIsDeclined(true);
+          // setRefreshData(!refreshData)
+        });
+    }
+  };
 
   if (profile) {
     return (
@@ -105,22 +125,21 @@ const ProfilePage = () => {
                   type="test"
                   onChange={(e) => {
                     setUserInput(e.target.value);
-          
                   }}
                 />
               ) : (
                 ""
               )}
-                {id === userId ? (
-                  <Submit
-                    disabled={userInput.length <= 0 || isSubmitting}
-                    type="submit"
-                  >
-                    Woof!
-                  </Submit>
-                ) : (
-                  ""
-                )}
+              {id === userId ? (
+                <Submit
+                  disabled={userInput.length <= 0 || isSubmitting}
+                  type="submit"
+                >
+                  Woof!
+                </Submit>
+              ) : (
+                ""
+              )}
             </StatusBox>
 
             {/* This block of code renders the previous posted statuses  */}
@@ -146,16 +165,44 @@ const ProfilePage = () => {
 
           {/* This block of code renders the pending playdates section  */}
           <PlaydateWrapper>
-          <PlaydateTitle> Pending Playdates </PlaydateTitle>
-          <Playdates> {profile.playdates.length && profile.playdates.map((playdate) => (
-            <>
-            <div>Requested By: {playdate.name}</div>
-            <div>Status: {playdate.status}</div>
-            {/* Display accept / decline buttons, only on current user profile */}
-            {id === userId ?<AcceptButton>Accept</AcceptButton> : ""}
-            {id === userId ?<DeclineButton>Decline</DeclineButton> : ""}
-            </>
-          ))}</Playdates>
+            <PlaydateTitle> Pending Playdates </PlaydateTitle>
+            <Playdates>
+              {" "}
+              {profile.playdates.length &&
+                profile.playdates.map((playdate) => (
+                  
+                  <PlaydateInfo>
+                    {console.log(playdate["requested-by"])}
+                    <div>{playdate.name}</div>
+                    <div>Status: {playdate.status}</div>
+                    {/* Display accept / decline buttons, only on current user profile */}
+                    {!isAccepted &&
+                      !isDeclined &&
+                      playdate.status === "Pending" && (
+                        <ResponseButtonDiv>
+                          {id === userId ? (
+                            <AcceptButton
+                              onClick={() => handlePlaydate("accept", playdate["requested-by"])}
+                            >
+                              Accept
+                            </AcceptButton>
+                          ) : (
+                            ""
+                          )}
+                          {id === userId ? (
+                            <DeclineButton
+                              onClick={() => handlePlaydate("cancel", playdate["requested-by"])}
+                            >
+                              Decline
+                            </DeclineButton>
+                          ) : (
+                            ""
+                          )}
+                        </ResponseButtonDiv>
+                      )}
+                  </PlaydateInfo>
+                ))}
+            </Playdates>
           </PlaydateWrapper>
         </PageDiv>
       </Wrapper>
@@ -165,7 +212,7 @@ const ProfilePage = () => {
 
 export default ProfilePage;
 
-// Styling for the header and contents of the page
+//// GENERAL ORGANIZATION OF THE PAGE AS A WHOLE ////
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -179,10 +226,9 @@ const TopWrapper = styled.div`
 `;
 
 const CurrentUserTitle = styled.div`
-font-size: 40px;
-font-weight: bold;
+  font-size: 40px;
+  font-weight: bold;
 `;
-
 
 const Title = styled.div`
   font-family: arial;
@@ -208,14 +254,12 @@ const UserDisplayBox = styled.div`
   flex-direction: column;
 `;
 
-const Statuses = styled.div`
-
-`;
+const Statuses = styled.div``;
 
 const StatusDiv = styled.div`
-border: 0.5px solid #E5E4E2;
-padding-top: 10px;
-`; 
+  border: 0.5px solid #e5e4e2;
+  padding-top: 10px;
+`;
 
 const UserInfo = styled.div`
   display: flex;
@@ -249,16 +293,15 @@ const Button = styled.button`
 `;
 
 const StatusContent = styled.div`
-font-size: 20px;
-padding-bottom: 10px;
+  font-size: 20px;
+  padding-bottom: 10px;
 `;
 
 const Timestamp = styled.div`
-display: flex;
-font-weight: lighter;
-font-size: 10px;
-`; 
-
+  display: flex;
+  font-weight: lighter;
+  font-size: 10px;
+`;
 
 const OwnerName = styled.div``;
 
@@ -268,29 +311,34 @@ const Joined = styled.div``;
 
 const Location = styled.div``;
 
-
-//// PLAYDATE SECTION //// 
+//// PLAYDATE SECTION ////
 
 const PlaydateWrapper = styled.div`
-display: flex;
-flex-direction: column;
-`; 
-
+  display: flex;
+  flex-direction: column;
+`;
 
 const Playdates = styled.div`
-display: flex;
-flex-direction: column;
-background-color: #afe1af;
+  display: flex;
+  flex-direction: column;
+  background-color: #afe1af;
   border-radius: 7px;
   width: 150px;
-`; 
+  padding: 5px;
+`;
 
 const PlaydateTitle = styled.div`
   font-family: arial;
   font-size: 45px;
   font-weight: bold;
   color: #355e3b;
-`; 
+`;
+
+const PlaydateInfo = styled.div``;
+
+const ResponseButtonDiv = styled.div`
+  padding-bottom: 10px;
+`;
 
 const AcceptButton = styled.button`
   height: 20px;
@@ -301,7 +349,8 @@ const AcceptButton = styled.button`
   border-radius: 10px;
   &:hover {
     cursor: pointer;
-  }`; 
+  }
+`;
 
 const DeclineButton = styled.button`
   height: 20px;
@@ -312,13 +361,10 @@ const DeclineButton = styled.button`
   border-radius: 10px;
   &:hover {
     cursor: pointer;
-  }`; 
+  }
+`;
 
-
-
-
-// Styling for the status update input on current user's
-// profile page
+//// STATUS UPDATE SECTION ////
 const StatusBox = styled.form`
   display: flex;
   flex-direction: column;
@@ -358,13 +404,4 @@ const PreviousStatuses = styled.div`
   font-size: 24px;
   font-family: arial;
   color: #355e3b;
-`;
-
-const NumberWrapper = styled.div``;
-
-const CharLeftWarning = styled.div``;
-
-const CharLeft = styled.div`
-  color: ${(props) =>
-    props.error ? "red" : props.warning ? "#FDDA0D" : "black"};
 `;

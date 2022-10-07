@@ -6,13 +6,14 @@ import { useNavigate } from "react-router-dom";
 
 const PlayDateDisplay = ({ user, hasAPlaydate }) => {
   const { ownerName, dogName, joined, location, avatarSrc } = user;
-  const { users, currentUser, currentUserData, setCurrentUserData } =
+  const { users, currentUser, currentUserData, setCurrentUserData, refreshData, setRefreshData} =
     useContext(UserContext);
-  console.log(currentUser);
+    const [isRequested, setIsRequested] = useState(hasAPlaydate);
+
   // Navigation to specific profile page
   let navigate = useNavigate();
   // For button logic
-  const [isRequested, setIsRequested] = useState(hasAPlaydate);
+
   const managePlaydate = (requestType) => {
 
       // PATCH add to playdates array
@@ -24,13 +25,19 @@ const PlayDateDisplay = ({ user, hasAPlaydate }) => {
         body: JSON.stringify({
           email: currentUser.email,
           name: currentUser.ownerName, 
+          userName: user.ownerName, 
           status: "Pending",
           id: user.id,
           requestType
         }),
       })
         .then((res) => res.json())
-        .then(requestType === "request" ? setIsRequested(true) : setIsRequested(false));
+        .then((data) => {
+          console.log(data)
+          requestType === "request" ? setIsRequested(true) : setIsRequested(false)
+          
+      })
+      .then((setRefreshData(!refreshData)))
   };
   return (
     <Wrapper>

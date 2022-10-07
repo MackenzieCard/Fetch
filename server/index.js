@@ -7,7 +7,7 @@ const { getUsers, getUser, addNewUser, updateExistingUser, getStatus, getStatuse
 express()
 .use(express.json())
 
-.use(morgan('tiny'))
+.use(morgan('dev'))
 
 
 // REST Endpoints 
@@ -19,12 +19,13 @@ express()
 .get("/api/get-playdates/:userEmail", getPlaydatesByUser)
 
 .post("/api/add-user", addNewUser)
-.patch("/api/update-playdate", updatePlaydate)
+
 
 .post("/api/add-status", addNewStatus)
 
 
 .patch("/api/update-user/:userId", updateExistingUser)
+.patch("/api/update-playdate", updatePlaydate)
 // Patch to accept or decline playdates 
 // .patch("/api-update-playdate-status", updatePlaydateStatus)
 

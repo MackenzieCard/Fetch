@@ -54,6 +54,7 @@ const getUser = async (req, res) => {
     dogName: "",
     location: "",
     joined: "",
+    playdates: [],
     avatarSrc: "",
   };
 
@@ -225,22 +226,20 @@ const getPlaydatesByUser = async (req, res) => {
 // PATCH to request new playdate to user //
 const updatePlaydate = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
-  const { email, status, id, name, requestType } = req.body;
+  const { email, status, id, name, requestType, } = req.body;
 
   try {
     await client.connect();
     const db = client.db("Fetch_Database");
     if (requestType === "request") {
-      const result = await db
+      const updateRequest = await db
         .collection("users")
         .updateOne(
           { id },
           { $push: { playdates: { "requested-by": email, name, status } } }
-        );
-
+        )
       res.status(201).json({
         status: 201,
-        data: result,
         message: "New playdate successfully requested",
       });
     }
@@ -249,20 +248,34 @@ const updatePlaydate = async (req, res) => {
         .collection("users")
         .updateOne(
           { id },
-          { $pull: { playdates: { "requested-by": email, name, status } } }
+          { $pull: { playdates: { "requested-by": email, status } } }
         );
 
       res.status(200).json({
         status: 200,
         data: result,
-        message: "Playdate successfully cancelled" ,
+        message: "Playdate successfully cancelled",
+      });
+    }
+    if (requestType === "accept") {
+      const result = await db
+        .collection("users")
+        .updateOne(
+          { id, "playdates.requested-by": email },
+          { $set: { "playdates.$.status": "Accepted" } }
+        );
+
+      res.status(200).json({
+        status: 200,
+        data: result,
+        message: "Playdate successfully accepted",
       });
     }
   } catch (err) {
     console.log(err);
     res.status(400).json({
       status: 400,
-      message: "Playdate could not be requested",
+      message: "Playdate could not be updated",
     });
   } finally {
     client.close();
