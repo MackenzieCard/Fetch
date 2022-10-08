@@ -254,12 +254,6 @@ const UserDisplayBox = styled.div`
   flex-direction: column;
 `;
 
-const Statuses = styled.div``;
-
-const StatusDiv = styled.div`
-  border: 0.5px solid #e5e4e2;
-  padding-top: 10px;
-`;
 
 const UserInfo = styled.div`
   display: flex;
@@ -292,11 +286,6 @@ const Button = styled.button`
   }
 `;
 
-const StatusContent = styled.div`
-  font-size: 20px;
-  padding-bottom: 10px;
-`;
-
 const Timestamp = styled.div`
   display: flex;
   font-weight: lighter;
@@ -323,7 +312,7 @@ const Playdates = styled.div`
   flex-direction: column;
   background-color: #afe1af;
   border-radius: 7px;
-  width: 150px;
+  width: 190px;
   padding: 5px;
 `;
 
@@ -334,7 +323,9 @@ const PlaydateTitle = styled.div`
   color: #355e3b;
 `;
 
-const PlaydateInfo = styled.div``;
+const PlaydateInfo = styled.div`
+
+`;
 
 const ResponseButtonDiv = styled.div`
   padding-bottom: 10px;
@@ -405,3 +396,15 @@ const PreviousStatuses = styled.div`
   font-family: arial;
   color: #355e3b;
 `;
+
+const StatusContent = styled.div`
+  font-size: 20px;
+  padding-bottom: 10px;
+`;
+
+const StatusDiv = styled.div`
+  border: 0.5px solid #e5e4e2;
+  padding-top: 10px;
+`;
+
+const Statuses = styled.div``;

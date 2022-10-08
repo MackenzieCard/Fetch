@@ -28,5 +28,9 @@ const LogoutButton = styled.button`
 background-color: #355e3b;
 border-radius: 10px;
 color: white;
-margin-left: 300px;
+display: flex;
+justify-content: center;
+align-items: center;
+margin-top: 200px ;
+margin-left: 500px;
 `; 
