@@ -10,11 +10,13 @@ const Header = () => {
       <StyledLink to={"/"}>
         <NameContainer>Fetch</NameContainer>
       </StyledLink>
-      {!user ? (
+      {!user ? 
+      (
         <StyledLink to={"/login"}>
           <LogInButton>Log In</LogInButton>
         </StyledLink>
-      ) : (
+      ) : 
+      (
         <StyledLink to={"/logout"}>
           <LogOutButton>Log Out</LogOutButton>
         </StyledLink>

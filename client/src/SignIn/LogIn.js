@@ -37,4 +37,7 @@ justify-content: center;
 align-items: center;
 margin-top: 200px ;
 margin-left: 500px;
+&:hover {
+    cursor: pointer;
+}
 `; 

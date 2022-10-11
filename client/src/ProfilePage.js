@@ -173,7 +173,7 @@ const ProfilePage = () => {
                   
                   <PlaydateInfo>
                     {console.log(playdate["requested-by"])}
-                    <div>{playdate.name}</div>
+                    <div>Requested By: {playdate.name}</div>
                     <div>Status: {playdate.status}</div>
                     {/* Display accept / decline buttons, only on current user profile */}
                     {!isAccepted &&
@@ -261,7 +261,7 @@ const UserInfo = styled.div`
   background-color: #afe1af;
   border-radius: 7px;
   line-height: 25px;
-  margin-right: 175px;
+  margin-right: 50px;
 `;
 
 const Photo = styled.img`
@@ -312,7 +312,7 @@ const Playdates = styled.div`
   flex-direction: column;
   background-color: #afe1af;
   border-radius: 7px;
-  width: 190px;
+  width: 225px;
   padding: 5px;
 `;
 
@@ -324,7 +324,7 @@ const PlaydateTitle = styled.div`
 `;
 
 const PlaydateInfo = styled.div`
-
+line-height: 20px;
 `;
 
 const ResponseButtonDiv = styled.div`
@@ -395,6 +395,7 @@ const PreviousStatuses = styled.div`
   font-size: 24px;
   font-family: arial;
   color: #355e3b;
+  margin-right: 50px;
 `;
 
 const StatusContent = styled.div`
