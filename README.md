@@ -16,7 +16,7 @@ Features of the Website:
 
 2. The Homepage is populated with displays of all nearby users and their general information. Clicking on one of the displays leads to the specified user's full profile (which includes general information about the user along with all previous status updates made by the user, and their current pending playdate plans with other users). 
 
-3. The Profile Page displays the current logged-in user's information, as well as their previous status and current pending playdate requests. From their profile, logged-in users have the ability to post new statuses, edit their profile information, and accept or decline their pending playdate requests. 
+3. The Profile Page displays the current logged-in user's information, as well as their previous statuses and current pending playdate requests. From their profile, logged-in users have the ability to post new statuses, edit their profile information, and accept or decline their pending playdate requests. 
 
 4. The Play Date Page allows the current logged-in user to request playdates with other nearby users and cancel the requests as well. 
 
