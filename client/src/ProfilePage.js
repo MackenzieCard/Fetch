@@ -19,6 +19,7 @@ const ProfilePage = () => {
   const [value, setValue] = useState(null);
   const [isAccepted, setIsAccepted] = useState(false);
   const [isDeclined, setIsDeclined] = useState(false);
+  const [refreshPage, setRefreshPage] = useState(false);
 
   // Fetch individual profile info
   useEffect(() => {
@@ -77,8 +78,8 @@ const ProfilePage = () => {
         .then((data) => {
           console.log(data);
           requestType === "accept" ? setIsAccepted(true) : setIsDeclined(true);
-          // setRefreshData(!refreshData)
-        });
+          
+        }); 
     }
   };
 
