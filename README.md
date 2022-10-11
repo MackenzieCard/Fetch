@@ -14,7 +14,7 @@ Features of the Website:
 
 1. Users have a secure sign-in to the site using Auth0. 
 
-2. The Homepage is populated with displays of all nearby users and their general information. Clicking on one of the displays leads to the specified user's full profile (which includes general information about the user along with all previous status updates made by the user, and their current pending playdate plans with other users). 
+2. The Homepage is populated with displays of all nearby users and their general information. Clicking on one of the displays leads to the specified user's full profile (which includes general information about the user along with all previous status updates made by the user, and their current pending playdate requests with other users). 
 
 3. The Profile Page displays the current logged-in user's information, as well as their previous statuses and current pending playdate requests. From their profile, logged-in users have the ability to post new statuses, edit their profile information, and accept or decline their pending playdate requests. 
 
@@ -26,7 +26,7 @@ Potential Future Features:
 
 2. The ability for logged-in users to add friends. 
 
-3. A comment feature on status updates to allow for users to comment on other user's status updates. 
+3. A comment feature on status updates to allow for users to comment on other users' status updates. 
 
 <img width="1419" alt="Fetch Demo Screenshots - Homepage" src="https://user-images.githubusercontent.com/109083308/195133112-e26f09d0-ce75-4417-a0bd-c2cd9a892a13.png">
 
