@@ -1,6 +1,6 @@
 # Fetch
 
-This is my final project for the Concordia Bootcamps Web Development Bootcamp. 
+This is my final project for the Concordia University Web Development Bootcamp. 
 
 The Goal of Fetch: 
 
