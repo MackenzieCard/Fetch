@@ -1,3 +1,5 @@
+// This file contains the logic for current user context 
+
 import { createContext, useState, useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 
@@ -10,7 +12,8 @@ export const CurrentUserProvider = ({ children }) => {
   const [currentUserData, setCurrentUserData] = useState(null);
   const [refreshData, setRefreshData] = useState(false); 
 const {user} = useAuth0()
-// fetch users from /api/get-users
+
+// Fetch users from /api/get-users
   useEffect(() => {
     fetch("/api/get-users")
       .then((res) => res.json())
@@ -18,7 +21,6 @@ const {user} = useAuth0()
         setUsers(userData.data);
       });
   }, []);
-
 
 // Fetch for getting the current user 
   useEffect(() => {

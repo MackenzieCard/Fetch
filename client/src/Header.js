@@ -1,3 +1,5 @@
+// This file contains the code used to render the header 
+
 import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
@@ -6,8 +8,8 @@ import { useAuth0 } from "@auth0/auth0-react";
 const Header = () => {
   const {user} = useAuth0(); 
   return (
-    <Wrapper>
-      <StyledLink to={"/"}>
+   <Wrapper>
+       <StyledLink to={"/"}>
         <NameContainer>Fetch</NameContainer>
       </StyledLink>
       {!user ? 
@@ -44,16 +46,6 @@ const NameContainer = styled.div`
   left: 0%;
 `;
 
-// const Title = styled.div`
-// color: black;
-// font-size: 50px ;
-// left: 0%;
-// /* font-family: var(--heading-font-family); */
-// &:hover{
-//   cursor: pointer;
-// }
-// `
-
 const LogInButton = styled.div`
   font-family: arial;
   position: absolute;
@@ -76,19 +68,3 @@ const LogOutButton = styled.div`
   }
 `;
 
-// const SignedInButton = styled.div`
-// position: absolute;
-// right: 0%;
-// color: white;
-// font-size: 50px ;
-// /* font-family: var(--heading-font-family); */
-// &:hover{
-//   cursor: pointer;
-// }
-// `
-
-// const Buttons = styled.div`
-// display: flex;
-// flex-direction: row;
-
-// `

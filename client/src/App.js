@@ -17,7 +17,6 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 const App = () => {
   const {currentUser} = useContext(UserContext)
-  // const [profile, setProfile] = useState(null); 
   const {user, loginWithRedirect} = useAuth0()
   console.log(user)
 console.log(currentUser)
@@ -29,7 +28,6 @@ console.log(currentUser)
         <Main>
         <Sidebar />
         <Routes>
-          {/* <Route path="/" element={ user ? <Homepage /> : <Navigate to= "/login" /> } /> */}
           <Route path="/" element={<Homepage />} />
           <Route path="/login" element={!currentUser ? <LogIn /> : <Navigate to= "/" />} />
           <Route path="/logout" element={currentUser ? <LogOut /> : <Navigate to="/" />} />
@@ -46,7 +44,6 @@ console.log(currentUser)
 export default App;
 
 const Wrapper = styled.div`
-/* display: flex; */
 
 `;
 

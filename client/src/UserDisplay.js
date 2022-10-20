@@ -1,3 +1,5 @@
+// This file contains the logic to create the small user displays on the homepage 
+
 import React from "react";
 import styled from "styled-components";
 import { useState, useEffect, useContext } from "react";
@@ -22,7 +24,6 @@ const UserDisplay = ({ user }) => {
             <DogName>Dog: {user.dogName}</DogName>
             <Location>Current Location: {user.location}</Location>
             <Joined>Joined: {user.joined}</Joined>
-            {/* TODO: RENDER MOST RECENT STATUS UPDATES ON MINI PROFILE */}
             <LatestStatus>Latest Status: {user.status[0].status} </LatestStatus>
           </div>
         </UserInfo>

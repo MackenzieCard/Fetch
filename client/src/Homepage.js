@@ -1,6 +1,8 @@
+// This code contains the logic used to render the homepage 
+
 import React from "react";
 import styled from "styled-components";
-import { useState, useEffect, useContext } from "react";
+import { useContext } from "react";
 import { UserContext } from "./UserContext";
 import UserDisplay from "./UserDisplay";
 import { useNavigate } from "react-router-dom";
@@ -40,7 +42,6 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 10px;
-  /* margin-left: 250px; */
 `;
 
 const DisplayWrapper = styled.div`
@@ -51,7 +52,6 @@ const DisplayWrapper = styled.div`
   max-width: 200px;
 `;
 
-
 const Title = styled.div`
   font-family: arial;
   font-size: 45px;
@@ -60,4 +60,4 @@ const Title = styled.div`
   padding-bottom: 10px;
 `;
 
-const User = styled.div``;
+

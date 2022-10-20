@@ -1,3 +1,5 @@
+// This file contains the logic to render the sidebar 
+
 import React, {useContext} from "react";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
@@ -46,6 +48,5 @@ const NavigationLink = styled(NavLink)`
   &:hover{
     cursor: pointer; 
     background-color:#AFE1AF;
-    /* max-width: fit-content; */
   }
 `;

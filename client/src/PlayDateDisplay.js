@@ -1,3 +1,6 @@
+// This file contains the logic to render the user displays and 
+// request + cancel request buttons on the Play Dates Page 
+
 import React from "react";
 import styled from "styled-components";
 import { useState, useEffect, useContext } from "react";
@@ -12,8 +15,8 @@ const PlayDateDisplay = ({ user, hasAPlaydate }) => {
 
   // Navigation to specific profile page
   let navigate = useNavigate();
-  // For button logic
 
+  // For button logic
   const managePlaydate = (requestType) => {
 
       // PATCH add to playdates array
@@ -103,8 +106,6 @@ const Photo = styled.img`
   max-width: 150px;
   border-radius: 7px;
 `;
-
-const ButtonDiv = styled.div``;
 
 const Button = styled.button`
   height: 20px;

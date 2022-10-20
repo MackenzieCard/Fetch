@@ -1,4 +1,4 @@
-// This page contains the code that displays the profile for the logged in
+// This file contains the code that displays the profile for the logged in
 // individual as well as the other users
 
 import React, { useContext, useState, useEffect } from "react";
@@ -60,6 +60,7 @@ const ProfilePage = () => {
       .catch((err) => console.log(err));
   };
 
+// Logic for handling playdate requests 
   const handlePlaydate = (requestType, requestedBy) => {
     if (!isAccepted || !isDeclined) {
       fetch("/api/update-playdate", {
@@ -302,7 +303,6 @@ const Joined = styled.div``;
 const Location = styled.div``;
 
 //// PLAYDATE SECTION ////
-
 const PlaydateWrapper = styled.div`
   display: flex;
   flex-direction: column;

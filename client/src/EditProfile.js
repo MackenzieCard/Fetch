@@ -1,4 +1,4 @@
-// This component contains the code that allows the current user to
+// This file contains the code that allows the current user to
 // update their profile information
 
 import React, { useContext, useState, useEffect } from "react";
@@ -100,9 +100,6 @@ const Submit = styled.button`
     background-color: gray;
     cursor: not-allowed;
   }
-  /* &:hover{
-    cursor: pointer;
-  } */
 `;
 
 const CancelButton = styled.button`
