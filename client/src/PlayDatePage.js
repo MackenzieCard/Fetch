@@ -1,4 +1,4 @@
-// This page contains the code that renders the Request a Playdate page
+// This page contains the code that renders the Playdates Page 
 
 import React from "react";
 import styled from "styled-components";
